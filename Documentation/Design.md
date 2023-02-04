@@ -46,8 +46,8 @@ The number of lines cleared * 5 will be added to your credits.
 # Database
 
 1. User and Login Table
-   1. *User_ID*
+   1. *User_ID* - Randomly Generated. 
    2. UserName (First Name, Last Name)
-   3. Password
-   4. Credits
+   3. Password - They are gonna set it. 
+   4. Credits - gonna be the sum of all the credits from all the games.
    4. Email-ID
