@@ -1,6 +1,5 @@
 # PuzzleLists
-
-// Add logo here. 
+![](./design/logo/logo%20-%20line%20format.png)
 
 An Arcade made in Python using Pygame and Pyqt that has 6 Puzzle Games. The games are:
 1. Maze Solver
