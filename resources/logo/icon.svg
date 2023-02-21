@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   height="72"
+   width="84.874344"
+   version="1.1"
+   id="svg19"
+   sodipodi:docname="logo.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview21"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false" />
+  <defs
+     id="SvgjsDefs1001" />
+  <g
+     id="SvgjsG1007"
+     featurekey="symbolFeature-0"
+     transform="matrix(0.93697546,0,0,0.93697546,-5.27049,-8.5686812)"
+     fill="#be3144">
+    <g
+       id="g13">
+      <rect
+         x="5.625"
+         y="71.990257"
+         width="13.997782"
+         height="13.997782"
+         id="rect3" />
+      <polygon
+         points="61.583931,85.988037 75.581711,85.988037 75.581711,71.990257 61.583931,71.990257 61.583931,57.992474 47.586151,57.992474 47.586151,71.990257 47.586151,85.988037 "
+         id="polygon5" />
+      <polygon
+         points="61.583931,9.1450434 47.586151,9.1450434 47.586151,19.474442 47.586151,23.142826 33.588367,23.142826 33.588367,37.140606 47.586151,37.140606 47.586151,51.13839 61.583931,51.13839 61.583931,23.142826 61.583931,19.474442 "
+         id="polygon7" />
+      <polygon
+         points="68.212753,64.991364 82.210533,64.991364 82.210533,78.989143 96.208313,78.989143 96.208313,50.993584 96.208313,47.325199 96.208313,36.995804 82.210533,36.995804 82.210533,47.325199 82.210533,50.993584 68.212753,50.993584 "
+         id="polygon9" />
+      <polygon
+         points="26.669941,71.990257 26.669941,85.988037 40.667721,85.988037 40.667721,71.990257 40.667721,57.992474 40.667721,43.994694 26.703455,43.994694 26.669941,43.994694 12.705673,43.994694 12.705673,57.992474 26.669941,57.992474 "
+         id="polygon11" />
+    </g>
+  </g>
+</svg>
