@@ -1,5 +1,6 @@
 # This file contains constants relating to the entire game. 
 import pygame as pg
+import os
 
 vec = pg.math.Vector2
 
@@ -41,4 +42,5 @@ ANIM_TIME_INTERVAL = 500 # milliseconds
 FAST_ANIM_INTERVAL = 50 # milliseconds
 
 # Sprite Constants
-SPRITE_DIR_PATH = 'design/sprites'
+SPRITE_DIR_PATH = os.path.join(os.getcwd(), 'games/tetris/design/sprites')
+print(SPRITE_DIR_PATH)
