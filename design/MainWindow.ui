@@ -53,10 +53,10 @@ color:&quot;#be3114&quot;
      <set>Qt::ImhNone</set>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>4</number>
     </property>
     <widget class="QWidget" name="Login">
-     <widget class="QPushButton" name="pushButton_3">
+     <widget class="QPushButton" name="login_newUser_btn">
       <property name="geometry">
        <rect>
         <x>630</x>
@@ -90,7 +90,7 @@ color: &quot;#fea7ec&quot;</string>
        <bool>true</bool>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_2">
+     <widget class="QPushButton" name="login_forgotPass_btn">
       <property name="geometry">
        <rect>
         <x>280</x>
@@ -124,7 +124,7 @@ color: &quot;#fea7ec&quot;</string>
        <bool>true</bool>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_2">
+     <widget class="QLineEdit" name="login_enterPass_lineedit">
       <property name="geometry">
        <rect>
         <x>810</x>
@@ -168,7 +168,7 @@ color: &quot;#fea7ec&quot;</string>
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QLabel" name="label_2">
+     <widget class="QLabel" name="login_enterName_lbl">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -194,7 +194,7 @@ color: &quot;#15063d&quot;</string>
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QLabel" name="label_3">
+     <widget class="QLabel" name="login_enterPass_lbl">
       <property name="geometry">
        <rect>
         <x>750</x>
@@ -220,7 +220,7 @@ color: &quot;#15063d&quot;</string>
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QLabel" name="label">
+     <widget class="QLabel" name="login_welcome_lbl">
       <property name="geometry">
        <rect>
         <x>190</x>
@@ -252,7 +252,7 @@ PuzzleLists</string>
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton">
+     <widget class="QPushButton" name="login_Begin_btn">
       <property name="geometry">
        <rect>
         <x>400</x>
@@ -297,7 +297,7 @@ background-color: inherit;</string>
        <bool>true</bool>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit">
+     <widget class="QLineEdit" name="login_enterName_lineedit">
       <property name="geometry">
        <rect>
         <x>100</x>
@@ -339,7 +339,7 @@ color: &quot;#fea7ec&quot;</string>
      </widget>
     </widget>
     <widget class="QWidget" name="Signup">
-     <widget class="QPushButton" name="pushButton_4">
+     <widget class="QPushButton" name="signup_sendOtp_btn">
       <property name="geometry">
        <rect>
         <x>290</x>
@@ -373,7 +373,7 @@ color: &quot;#fea7ec&quot;</string>
        <bool>true</bool>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_5">
+     <widget class="QPushButton" name="signup_verifyOtp_btn">
       <property name="geometry">
        <rect>
         <x>660</x>
@@ -407,7 +407,7 @@ color: &quot;#fea7ec&quot;</string>
        <bool>true</bool>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_3">
+     <widget class="QLineEdit" name="signup_enterPass_lineedit">
       <property name="geometry">
        <rect>
         <x>800</x>
@@ -451,7 +451,7 @@ color: &quot;#fea7ec&quot;</string>
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QLabel" name="label_4">
+     <widget class="QLabel" name="signup_enterName_lbl">
       <property name="geometry">
        <rect>
         <x>30</x>
@@ -477,7 +477,7 @@ color: white;</string>
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_4">
+     <widget class="QLineEdit" name="signup_enterName_lineedit">
       <property name="geometry">
        <rect>
         <x>150</x>
@@ -517,7 +517,7 @@ color: &quot;#fea7ec&quot;</string>
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QLabel" name="label_5">
+     <widget class="QLabel" name="signup_enterPass_lbl">
       <property name="geometry">
        <rect>
         <x>760</x>
@@ -544,7 +544,7 @@ color: white
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QLabel" name="label_6">
+     <widget class="QLabel" name="signup_welcome_lbl">
       <property name="geometry">
        <rect>
         <x>160</x>
@@ -581,7 +581,7 @@ color: &quot;#fea7ec&quot;</string>
        <bool>true</bool>
       </property>
      </widget>
-     <widget class="QLabel" name="label_7">
+     <widget class="QLabel" name="signup_enterEmail_lbl">
       <property name="geometry">
        <rect>
         <x>110</x>
@@ -607,7 +607,7 @@ color: white</string>
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_5">
+     <widget class="QLineEdit" name="signup_enterEmail_lineedit">
       <property name="geometry">
        <rect>
         <x>30</x>
@@ -647,7 +647,7 @@ color: &quot;#fea7ec&quot;</string>
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_6">
+     <widget class="QLineEdit" name="signup_enterOtp_lineedit">
       <property name="geometry">
        <rect>
         <x>830</x>
@@ -687,7 +687,7 @@ color: &quot;#fea7ec&quot;</string>
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QLabel" name="label_8">
+     <widget class="QLabel" name="signup_enterOtp_lbl">
       <property name="geometry">
        <rect>
         <x>750</x>
@@ -713,7 +713,7 @@ color: white;</string>
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QLabel" name="label_14">
+     <widget class="QLabel" name="signup_remark_lbl">
       <property name="geometry">
        <rect>
         <x>310</x>
@@ -741,7 +741,7 @@ color: white;</string>
      </widget>
     </widget>
     <widget class="QWidget" name="ForgotPass">
-     <widget class="QLabel" name="label_9">
+     <widget class="QLabel" name="fpass_enterName_lbl">
       <property name="geometry">
        <rect>
         <x>30</x>
@@ -767,7 +767,7 @@ color: white;</string>
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_7">
+     <widget class="QLineEdit" name="fpass_enterEmail_lineedit">
       <property name="geometry">
        <rect>
         <x>30</x>
@@ -807,7 +807,7 @@ color: &quot;#fea7ec&quot;</string>
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_8">
+     <widget class="QLineEdit" name="fpass_enterPass_lineedit">
       <property name="geometry">
        <rect>
         <x>800</x>
@@ -851,7 +851,7 @@ color: &quot;#fea7ec&quot;</string>
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QLabel" name="label_10">
+     <widget class="QLabel" name="fpass_welcome_lbl">
       <property name="geometry">
        <rect>
         <x>160</x>
@@ -888,7 +888,7 @@ color: &quot;#fea7ec&quot;</string>
        <bool>true</bool>
       </property>
      </widget>
-     <widget class="QLabel" name="label_11">
+     <widget class="QLabel" name="fpass_enterEmail_lbl">
       <property name="geometry">
        <rect>
         <x>110</x>
@@ -914,7 +914,7 @@ color: white</string>
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_9">
+     <widget class="QLineEdit" name="fpass_enterOtp_lineedit">
       <property name="geometry">
        <rect>
         <x>830</x>
@@ -954,7 +954,7 @@ color: &quot;#fea7ec&quot;</string>
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QLabel" name="label_12">
+     <widget class="QLabel" name="fpass_enterPass_lbl">
       <property name="geometry">
        <rect>
         <x>760</x>
@@ -981,7 +981,7 @@ color: white
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_10">
+     <widget class="QLineEdit" name="fpass_enterName_lineedit">
       <property name="geometry">
        <rect>
         <x>150</x>
@@ -1021,7 +1021,7 @@ color: &quot;#fea7ec&quot;</string>
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QLabel" name="label_13">
+     <widget class="QLabel" name="fpass_enterOtp_lbl">
       <property name="geometry">
        <rect>
         <x>750</x>
@@ -1047,7 +1047,7 @@ color: white;</string>
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_6">
+     <widget class="QPushButton" name="fpass_sendOtp_btn">
       <property name="geometry">
        <rect>
         <x>290</x>
@@ -1081,7 +1081,7 @@ color: &quot;#fea7ec&quot;</string>
        <bool>true</bool>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_7">
+     <widget class="QPushButton" name="fpass_verifyOtp_btn">
       <property name="geometry">
        <rect>
         <x>660</x>
@@ -1115,7 +1115,7 @@ color: &quot;#fea7ec&quot;</string>
        <bool>true</bool>
       </property>
      </widget>
-     <widget class="QLabel" name="label_15">
+     <widget class="QLabel" name="fpass_remark_lbl">
       <property name="geometry">
        <rect>
         <x>310</x>
@@ -1145,10 +1145,11 @@ color: white;</string>
     <widget class="QWidget" name="ChooseGame">
      <property name="font">
       <font>
+       <family>Alba</family>
        <pointsize>1</pointsize>
       </font>
      </property>
-     <widget class="QLabel" name="label_16">
+     <widget class="QLabel" name="chgame_game1_lbl">
       <property name="geometry">
        <rect>
         <x>210</x>
@@ -1176,7 +1177,7 @@ color: white;</string>
        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
       </property>
      </widget>
-     <widget class="QLabel" name="label_17">
+     <widget class="QLabel" name="chgame_welcome_lbl">
       <property name="geometry">
        <rect>
         <x>140</x>
@@ -1207,7 +1208,7 @@ color: &quot;#fea7ec&quot;</string>
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QLabel" name="label_18">
+     <widget class="QLabel" name="chgame_game2_lbl">
       <property name="geometry">
        <rect>
         <x>210</x>
@@ -1235,7 +1236,7 @@ color: white;</string>
        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
       </property>
      </widget>
-     <widget class="QLabel" name="label_19">
+     <widget class="QLabel" name="chgame_game3_lbl">
       <property name="geometry">
        <rect>
         <x>210</x>
@@ -1263,7 +1264,7 @@ color: white;</string>
        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
       </property>
      </widget>
-     <widget class="QLabel" name="label_20">
+     <widget class="QLabel" name="chgame_game4_lbl">
       <property name="geometry">
        <rect>
         <x>210</x>
@@ -1291,7 +1292,7 @@ color: white;</string>
        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
       </property>
      </widget>
-     <widget class="QLabel" name="label_21">
+     <widget class="QLabel" name="chgame_game5_lbl">
       <property name="geometry">
        <rect>
         <x>210</x>
@@ -1319,7 +1320,7 @@ color: white;</string>
        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
       </property>
      </widget>
-     <widget class="QLabel" name="label_22">
+     <widget class="QLabel" name="chgame_name_lbl">
       <property name="geometry">
        <rect>
         <x>1010</x>
@@ -1345,7 +1346,7 @@ color: &quot;#fea7ec&quot;</string>
        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
       </property>
      </widget>
-     <widget class="QLabel" name="label_23">
+     <widget class="QLabel" name="chgame_coins_lbl">
       <property name="geometry">
        <rect>
         <x>480</x>
@@ -1371,7 +1372,7 @@ color: &quot;#fea7ec&quot;</string>
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_8">
+     <widget class="QPushButton" name="chgame_game1_btn">
       <property name="geometry">
        <rect>
         <x>919</x>
@@ -1419,7 +1420,7 @@ border-radius: 30;
        <bool>true</bool>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_9">
+     <widget class="QPushButton" name="chgame_game2_btn">
       <property name="geometry">
        <rect>
         <x>920</x>
@@ -1464,7 +1465,7 @@ background-color: inherit;</string>
        <bool>true</bool>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_10">
+     <widget class="QPushButton" name="chgame_game3_btn">
       <property name="geometry">
        <rect>
         <x>920</x>
@@ -1509,7 +1510,7 @@ background-color: inherit;</string>
        <bool>true</bool>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_11">
+     <widget class="QPushButton" name="chgame_game4_btn">
       <property name="geometry">
        <rect>
         <x>920</x>
@@ -1554,7 +1555,7 @@ background-color: inherit;</string>
        <bool>true</bool>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_12">
+     <widget class="QPushButton" name="chgame_game5_btn">
       <property name="geometry">
        <rect>
         <x>920</x>
@@ -1599,7 +1600,7 @@ background-color: inherit;</string>
        <bool>true</bool>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_13">
+     <widget class="QPushButton" name="chgame_viewScore_btn">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -1635,7 +1636,7 @@ color: &quot;#fea7ec&quot;</string>
      </widget>
     </widget>
     <widget class="QWidget" name="HighScores">
-     <widget class="QLabel" name="label_24">
+     <widget class="QLabel" name="hgscore_welcome_lbl">
       <property name="geometry">
        <rect>
         <x>160</x>
@@ -1666,7 +1667,7 @@ color: &quot;#fea7ec&quot;</string>
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_14">
+     <widget class="QPushButton" name="hgscore_backToGame_btn">
       <property name="geometry">
        <rect>
         <x>470</x>
@@ -1700,7 +1701,7 @@ color: &quot;#fea7ec&quot;</string>
        <bool>true</bool>
       </property>
      </widget>
-     <widget class="QColumnView" name="HighScoreColumnView">
+     <widget class="QColumnView" name="hgscore_score_colview">
       <property name="geometry">
        <rect>
         <x>220</x>
