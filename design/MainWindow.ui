@@ -40,6 +40,7 @@ color:&quot;#be3114&quot;
     </property>
     <property name="font">
      <font>
+      <family>Alba Matter</family>
       <pointsize>22</pointsize>
      </font>
     </property>
