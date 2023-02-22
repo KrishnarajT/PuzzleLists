@@ -5,7 +5,8 @@ from settings import *
 from tetris import Tetris
 import pathlib
 
-class App:
+
+class TetrisApp:
     def __init__(self):
         pg.init()
         pg.display.set_caption("TETRIS - From the Puzzlelist")
@@ -15,14 +16,16 @@ class App:
         self.images = self.load_images()
         self.running = True
         self.tetris = Tetris(self)
-        
-    
+
     def load_images(self):
-        files = [item for item in pathlib.Path(SPRITE_DIR_PATH).rglob("*.png") if item.is_file()]
+        files = [
+            item
+            for item in pathlib.Path(SPRITE_DIR_PATH).rglob("*.png")
+            if item.is_file()
+        ]
         images = [pg.image.load(filename).convert_alpha() for filename in files]
         images = [pg.transform.scale(image, (TILE_SIZE, TILE_SIZE)) for image in images]
         return images
-
 
     def set_timer(self):
         # normal
@@ -56,16 +59,16 @@ class App:
 
             elif event.type == pg.KEYDOWN:
                 self.tetris.control(pressed_key=event.key)
-                
+
             # gets triggered by our timer we created above in set_timer()
             elif event.type == self.user_event:
                 self.anim_trigger = True
-                
+
             elif event.type == self.fast_user_event:
-                self.fast_anim_trigger = True    
-            
+                self.fast_anim_trigger = True
+
             elif event.type == pg.KEYUP:
-                if(event.key == pg.K_DOWN or event.key == pg.K_s):
+                if event.key == pg.K_DOWN or event.key == pg.K_s:
                     self.tetris.speed_up = False
 
     def run(self):
@@ -76,5 +79,5 @@ class App:
 
 
 if __name__ == "__main__":
-    app = App()
+    app = TetrisApp()
     app.run()

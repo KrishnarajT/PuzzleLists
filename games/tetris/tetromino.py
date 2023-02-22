@@ -7,7 +7,7 @@ class Block(pg.sprite.Sprite):
     def __init__(self, tetromino, position):
         self.tetromino = tetromino
         super().__init__(self.tetromino.tetris.sprite_group)
-        
+
         self.position = vec(position) + INITIAL_OFFSET
         self.image = self.tetromino.image
         # self.color = pg.Color("#BE3114")
@@ -19,7 +19,7 @@ class Block(pg.sprite.Sprite):
     def is_Alive(self):
         if not self.alive:
             self.kill()
-    
+
     def set_rect_position(self):
         self.rect.topleft = self.position * TILE_SIZE
 
