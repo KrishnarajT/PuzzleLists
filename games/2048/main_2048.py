@@ -133,9 +133,7 @@ TILE_SIDE = floor(BG_BOX_SIZE / 4.6511)
 
 # INITIALIZING THE WINDOW.
 
-WIN = pygame.display.set_mode((WIDTH, HEIGHT), pygame.RESIZABLE)
-pygame.display.set_caption("2048")
-
+WIN = None
 # INITIALIZING THE FONTS.
 
 GAME_FONT = pygame.font.Font(
@@ -713,7 +711,12 @@ def lostGame():
 
 # DEFINING THE START FUNCTION
 def start_2048():
-    global score, high_score, fin
+    global score, high_score, fin, WIN
+    
+    # INITIALIZING THE WINDOW
+    WIN = pygame.display.set_mode((WIDTH, HEIGHT), pygame.RESIZABLE)
+    pygame.display.set_caption("2048")
+    
     start_Loop = True
     while start_Loop:
         WIN.blit(BG_IMAGE, ORIGIN)

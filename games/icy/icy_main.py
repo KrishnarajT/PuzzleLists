@@ -20,8 +20,7 @@ import pyautogui
 import os
 import random
 
-pygame.font.init()
-pygame.mixer.init()
+
 
 WIDTH, HEIGHT = pyautogui.size()
 
@@ -58,9 +57,7 @@ MENU_IMAGE = pygame.transform.scale(
     (WIDTH, HEIGHT),
 )
 
-
-WIN = pygame.display.set_mode((WIDTH, HEIGHT), pygame.RESIZABLE)
-pygame.display.set_caption("ICY")
+WIN = None
 
 # X AND Y COORDINATES OF THE BUTTONS ON SCREEN, TO BE DETECTED BY THE MOUSE POSITION
 START_BTN_LOWER = (WIDTH - floor(WIDTH / 4.5), HEIGHT - floor(HEIGHT / 2.3))
@@ -75,12 +72,6 @@ TIME_LIM_BTN_UPPER = (WIDTH - floor(WIDTH / 3.14), HEIGHT - floor(HEIGHT / 2.51)
 CLICK_LIM_BTN_LOWER = (WIDTH - floor(WIDTH / 1.46), HEIGHT - floor(HEIGHT / 3.2))
 CLICK_LIM_BTN_UPPER = (WIDTH - floor(WIDTH / 3.14), HEIGHT - floor(HEIGHT / 10.8))
 
-# BGM AND CLICK SOUNC EFFECT
-BGM = pygame.mixer.music.load(os.path.join(os.getcwd(), "resources/audio", "BGM.mp3"))
-pygame.mixer.music.play(-1)
-CLICK_SOUND = pygame.mixer.Sound(
-    os.path.join(os.getcwd(), "resources/audio", "SELECT1.ogg")
-)
 
 # DIMENSIONS OF THE BOX TO BE DRAWN IN THE BACKGROUND ON PLAY SCREEN
 BG_BOX_SIDE = 700
@@ -733,6 +724,22 @@ def mainMenu():
 
 # FUNCTION TO START THE GAME AND SHOW THE MAIN SCREEN.
 def start_icy():
+    global WIN
+
+    pygame.font.init()
+    pygame.mixer.init()    
+    
+    WIN = pygame.display.set_mode((WIDTH, HEIGHT), pygame.RESIZABLE)
+    pygame.display.set_caption("ICY")
+    
+    
+    # BGM AND CLICK SOUNC EFFECT
+    BGM = pygame.mixer.music.load(os.path.join(os.getcwd(), "resources/audio", "BGM.mp3"))
+    pygame.mixer.music.play(-1)
+    CLICK_SOUND = pygame.mixer.Sound(
+        os.path.join(os.getcwd(), "resources/audio", "SELECT1.ogg")
+    )
+
     loop = True
     run_Menu = False
     while loop:

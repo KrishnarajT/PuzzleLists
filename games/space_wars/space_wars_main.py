@@ -11,19 +11,9 @@ WIDTH, HEIGHT = pyautogui.size()
 FPS = 90
 ORIGIN = (0, 0)
 
-# adding music
-pygame.mixer.music.load(os.path.join(os.getcwd(), "resources/audio", "bgm.wav"))
-laser_Sound = pygame.mixer.Sound(
-    os.path.join(os.getcwd(), "resources/audio", "laser.wav")
-)
-explosion_Sound = pygame.mixer.Sound(
-    os.path.join(os.getcwd(), "resources/audio", "explosion.wav")
-)
-pygame.mixer.music.play(-1)
 
-# WINDOW CONSTANTS
-WIN = pygame.display.set_mode((WIDTH, HEIGHT), pygame.FULLSCREEN | pygame.RESIZABLE)
-pygame.display.set_caption("Ship Shooter")
+
+WIN = None
 
 # CONSTANT DEFITNIONS
 # ENEMY SHIPS
@@ -475,6 +465,20 @@ def main():
 
 
 def start_space_wars():
+    # adding music
+    pygame.mixer.music.load(os.path.join(os.getcwd(), "resources/audio", "bgm.wav"))
+    laser_Sound = pygame.mixer.Sound(
+        os.path.join(os.getcwd(), "resources/audio", "laser.wav")
+    )
+    explosion_Sound = pygame.mixer.Sound(
+        os.path.join(os.getcwd(), "resources/audio", "explosion.wav")
+    )
+    pygame.mixer.music.play(-1)
+    global WIN
+    # WINDOW CONSTANTS
+    WIN = pygame.display.set_mode((WIDTH, HEIGHT), pygame.FULLSCREEN | pygame.RESIZABLE)
+    pygame.display.set_caption("Ship Shooter")
+
     run = True
     while run:
         WIN.blit(BG_IMAGE, ORIGIN)

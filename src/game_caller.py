@@ -15,4 +15,5 @@ from snake_main import snake_game
 from main_2048 import start_2048
 
 if __name__ == "__main__":
+
     pass
