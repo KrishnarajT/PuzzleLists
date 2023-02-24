@@ -13,7 +13,7 @@ back_gd = pg.Color("#fedde0")
 snake_food_color = (0, 255, 0)
 
 # game over screen
-game_over_mssg = pg.Color("#952735")
+game_over_mssg = pg.Color("#FFFFFF")
 game_over_color = "#0C120C"
 
 
@@ -32,6 +32,7 @@ class Food:
         self.apple_image = pg.transform.scale(self.apple_image, (40, 40))
         self.pos_x = Size * 3
         self.pos_y = Size * 3
+
         # pg.draw.circle(self.parent_display,snake_color,[self.pos_x[i],self.pos_y[i]],20,20)
 
     def draw_food(self):
@@ -67,7 +68,7 @@ class Snake:
 
     def draw_body(self):
         # we need display fill to clear previous blocks before moving to new co-ordinate
-        self.parent_display.fill(back_gd)
+        # self.parent_display.fill(back_gd)
 
         if self.direction_of_snake == "DOWN":
             self.snake_image = pg.image.load(
@@ -154,12 +155,22 @@ class snake_game:
         pg.display.set_caption("Snake BY Puzzlelists")
 
         self.display = pg.display.set_mode((1280, 720))
-        self.display.fill(back_gd)
+        # self.display.fill(back_gd)
+        self.bg_image = pg.image.load(
+            os.path.join(os.getcwd(), "resources/images/snake/grass.png")
+        ).convert_alpha()
         self.snake = Snake(self.display)
         self.snake.draw_body()
         self.food = Food(self.display)
         self.food.draw_food()
         self.speed = 0.21
+        self.font = pg.font.SysFont("arial", 30)
+        self.main_Font = pg.font.Font(
+            os.path.join(os.getcwd(), "resources/fonts", "joystix monospace.otf"), 35
+        )
+        self.game_over_font = pg.font.Font(
+            os.path.join(os.getcwd(), "resources/fonts", "joystix monospace.otf"), 25
+        )
 
     # reset game
     def reset(self):
@@ -175,7 +186,10 @@ class snake_game:
 
     # render background
     def render_background(self):
-        self.display.fill(back_gd)
+        # self.display.fill(back_gd)
+        self.display.blit(self.bg_image, (0, 0))
+        self.display_score()
+        # pass
 
     def play(self):
         self.render_background()
@@ -183,6 +197,7 @@ class snake_game:
         self.food.draw_food()
         self.display_score()
         pg.display.flip()
+        pg.display.update()
 
         # snake eating apple scenario
         if self.is_collision(
@@ -206,30 +221,43 @@ class snake_game:
         if (
             self.snake.pos_x[0] >= 1280
             or self.snake.pos_x[0] < 0
-            or self.snake.pos_y[0] >= 780
+            or self.snake.pos_y[0] >= 720
             or self.snake.pos_y[0] < 0
         ):
             raise "collision Occurred"
 
     # display score
     def display_score(self):
-        font = pg.font.SysFont("arial", 30)
-        score = font.render(f"SCORE:{self.snake.length}", True, (0, 0, 0))
+        score = self.main_Font.render(f"SCORE:{self.snake.length}", True, (255, 255, 255))
         self.display.blit(score, (1000, 10))
 
     # game over screen
 
     def game_over_screen(self):
         self.render_background()
-        font = pg.font.SysFont("arial", 30)
-        line1 = font.render(
+
+        line1 = self.game_over_font.render(
             f"Game Is Over! Your Score is {self.snake.length}", True, game_over_mssg
         )
-        self.display.blit(line1, (200, 300))
-        line2 = font.render(
+        self.display.blit(
+            line1,
+            (
+                self.display.get_width() / 2 - line1.get_width() / 2,
+                self.display.get_height() / 2 - line1.get_height() / 2,
+            ),
+        )
+        line2 = self.game_over_font.render(
             "To play again press Enter. To exit press Esc!", True, game_over_mssg
         )
-        self.display.blit(line2, (200, 350))
+        self.display.blit(
+            line2,
+            (
+                self.display.get_width() / 2 - line2.get_width() / 2,
+                self.display.get_height() / 2
+                - line2.get_height() / 2
+                + line1.get_height() * 1.3,
+            ),
+        )
         pg.display.flip()
 
     # increase snake speed after eating apple
@@ -249,6 +277,7 @@ class snake_game:
 
                     if event.key == K_RETURN:
                         game_pause = False
+                        self.speed = 0.21
 
                     if not game_pause:
                         if event.key == pg.K_UP or event.key == pg.K_w:
