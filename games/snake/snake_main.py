@@ -5,7 +5,7 @@ import os
 import time as tm
 
 #  variables for snake eyes
-snake_eyes = pg.Color("#ffffff")
+snake_eyes = pg.Color("#000000")
 
 # Initializing colors for snake, background and food
 snake_color = pg.Color("#d25062")
@@ -13,7 +13,7 @@ back_gd = pg.Color("#fedde0")
 snake_food_color = (0, 255, 0)
 
 # game over screen
-game_over_mssg = pg.Color("#FFFFFF")
+game_over_mssg = pg.Color("#000000")
 game_over_color = "#0C120C"
 
 
@@ -228,7 +228,7 @@ class snake_game:
 
     # display score
     def display_score(self):
-        score = self.main_Font.render(f"SCORE:{self.snake.length}", True, (255, 255, 255))
+        score = self.main_Font.render(f"SCORE:{self.snake.length}", True, (0, 0, 0))
         self.display.blit(score, (1000, 10))
 
     # game over screen
@@ -263,7 +263,7 @@ class snake_game:
     # increase snake speed after eating apple
     def Increase_speed(self):
         if self.is_collision:
-            self.speed -= 0.009
+            self.speed -= 0.007
 
     def run(self):
         game_running = True

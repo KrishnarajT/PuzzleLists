@@ -1,10 +1,10 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022/Arch Linux) (preloaded format=pdflatex 2022.11.21)  4 FEB 2023 13:09
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022/Arch Linux) (preloaded format=pdflatex 2022.11.21)  24 FEB 2023 23:11
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
-**/run/media/krishnaraj/Programs/Python/PuzzleLists/Documentation/SRS.tex
-(/run/media/krishnaraj/Programs/Python/PuzzleLists/Documentation/SRS.tex
+**/run/media/krishnaraj/Programs/Python/PuzzleLists/documentation/SRS.tex
+(/run/media/krishnaraj/Programs/Python/PuzzleLists/documentation/SRS.tex
 LaTeX2e <2021-11-15> patch level 1
 L3 programming layer <2022-04-10> (/usr/share/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2021/10/04 v1.4n Standard LaTeX document class
@@ -692,19 +692,21 @@ pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has b
                    \relax 
 l.135 \clearpage
                  [1]
-LaTeX Font Info:    Font shape `T1/fnc/m/it' will be
-(Font)              scaled to size 10.18341pt on input line 140.
-
-Underfull \hbox (badness 10000) in paragraph at lines 143--144
-
- []
-
 LaTeX Font Info:    Font shape `T1/fnc/m/n' will be
-(Font)              scaled to size 11.15991pt on input line 147.
+(Font)              scaled to size 11.15991pt on input line 145.
 LaTeX Font Info:    Font shape `T1/fnc/b/n' will be
-(Font)              scaled to size 11.15991pt on input line 147.
+(Font)              scaled to size 11.15991pt on input line 145.
+LaTeX Font Info:    Trying to load font information for TS1+fnc on input line 174.
+ (/usr/share/texmf-dist/tex/latex/fouriernc/ts1fnc.fd
+File: ts1fnc.fd 2005/12/13 font definitions for TS1/fnc.
+)
+LaTeX Font Info:    Font shape `TS1/fnc/m/n' will be
+(Font)              scaled to size 10.18341pt on input line 174.
 LaTeX Font Info:    Font shape `T1/fnc/m/it' will be
-(Font)              scaled to size 13.39188pt on input line 165.
+(Font)              scaled to size 10.18341pt on input line 199.
+LaTeX Font Info:    Font shape `T1/fnc/m/it' will be
+(Font)              scaled to size 13.39188pt on input line 199.
+
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 13.93642pt, for example:
@@ -716,17 +718,10 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.165 \end{enumerate}
-                      [1
+l.199     \item S
+                 cores [1
 
 ]
-LaTeX Font Info:    Trying to load font information for TS1+fnc on input line 170.
- (/usr/share/texmf-dist/tex/latex/fouriernc/ts1fnc.fd
-File: ts1fnc.fd 2005/12/13 font definitions for TS1/fnc.
-)
-LaTeX Font Info:    Font shape `TS1/fnc/m/n' will be
-(Font)              scaled to size 10.18341pt on input line 170.
-
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 13.93642pt, for example:
@@ -734,48 +729,23 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller to compensate:
 (fancyhdr)                \addtolength{\topmargin}{-1.93642pt}.
 
-[2]
-Overfull \hbox (61.83363pt too wide) in paragraph at lines 224--232
-[][] 
- []
-
-
-Overfull \hbox (57.1286pt too wide) in paragraph at lines 280--286
-[][] 
- []
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.93642pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.93642pt}.
-(fancyhdr)                You might also make \topmargin smaller to compensate:
-(fancyhdr)                \addtolength{\topmargin}{-1.93642pt}.
-
-[3]
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.93642pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.93642pt}.
-(fancyhdr)                You might also make \topmargin smaller to compensate:
-(fancyhdr)                \addtolength{\topmargin}{-1.93642pt}.
-
-[4] (./SRS.aux)
+[2] (./SRS.aux)
 Package rerunfilecheck Info: File `SRS.out' has not changed.
-(rerunfilecheck)             Checksum: 9C22E7E0436EC57253164E4367978F8A;2200.
+(rerunfilecheck)             Checksum: 0A4E0ED458DCFB7ACBC29719456E4583;1952.
  ) 
 Here is how much of TeX's memory you used:
- 12956 strings out of 478238
- 195545 string characters out of 5850455
- 503794 words of memory out of 5000000
- 30937 multiletter control sequences out of 15000+600000
- 518999 words of font info for 83 fonts, out of 8000000 for 9000
+ 12926 strings out of 478238
+ 195336 string characters out of 5850455
+ 493792 words of memory out of 5000000
+ 30933 multiletter control sequences out of 15000+600000
+ 517986 words of font info for 82 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 65i,14n,69p,707b,432s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 65i,12n,69p,321b,411s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texmf-dist/fonts/type1/urw/ncntrsbk/uncb8a.pfb></usr/share/texmf-dist/fonts/type1/urw/ncntrsbk/uncr8a.pfb></usr/share/texmf-dist/fonts/type1/urw/ncntrsbk/uncri8a.pfb>
-Output written on SRS.pdf (6 pages, 58798 bytes).
+Output written on SRS.pdf (4 pages, 48538 bytes).
 PDF statistics:
- 175 PDF objects out of 1000 (max. 8388607)
- 159 compressed objects within 2 object streams
- 45 named destinations out of 1000 (max. 500000)
- 153 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 126 PDF objects out of 1000 (max. 8388607)
+ 112 compressed objects within 2 object streams
+ 20 named destinations out of 1000 (max. 500000)
+ 129 words of extra memory for PDF output out of 10000 (max. 10000000)
 
