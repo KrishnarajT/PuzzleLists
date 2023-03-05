@@ -3,7 +3,7 @@ QMainWindow{
 }
 QPushButton{
     background: transparent;
-    color: '#ffffff';    
+    color: '#fea7ec';    
     background-color: "#1c0940";
 }
 QLineEdit{

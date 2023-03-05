@@ -22,7 +22,7 @@ if __name__ == "__main__":
 
 	window.show()
 
-	window.change_Screen(1)
+	window.change_Screen(3)
 
 	# for i in range(5):
 	#     window.change_Screen(i)
