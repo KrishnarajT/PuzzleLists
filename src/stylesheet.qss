@@ -1,3 +1,19 @@
 QMainWindow{
     background: url(images:login_bg_blur.jpg);
 }
+QPushButton{
+    background: transparent;
+    color: '#ffffff';    
+    background-color: "#1c0940";
+}
+QLineEdit{
+    background: transparent;
+    color: '#fea7ec';
+}
+QPushButton[objectName^="login_Begin_btn"]{
+    color: "#fea7ec";
+    border-radius: 20;
+    background-color: "#1c0940";
+    /* font-family: url(fonts:kel.ttf);
+    /* font-family: "Game Played"; */
+}
