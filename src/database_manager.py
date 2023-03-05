@@ -26,7 +26,7 @@ class database_manager:
         }
         self.total_score = self.find_total_score()
         self.top_scores = None
-        pass
+        self.games_owned_by_user = ['snake', 'tetris']
 
     def find_total_score(self):
         """

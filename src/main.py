@@ -2,7 +2,6 @@ from MainWindow import Ui_Puzzlelists
 import os
 import sys, time
 
-import game_caller as gc
 import constants as ct
 
 from PyQt6 import QtCore, QtGui, QtWidgets
