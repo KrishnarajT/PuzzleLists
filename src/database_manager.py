@@ -59,39 +59,27 @@
             self.cur.execute("Create table if not exists GameScores(User_ID integer, Snake integer, 2048 integer, Tetris integer, Space_wars integer, Icy integer, Foreign key (User_ID) References UserLogin(User_ID))")
 
 
+
         def get_user_data(self, user_name):
             """
-            returns the a dictionary containing information about the user if the user name is found.
-            if the password is not found, it returns 0, meaning the username doesn't exist.
+            If the user is present, it returns True and the data is stored in the self.user_data dictionary.
+            Else it returns False.
             """
             check_user = f"SELECT User_Name from UserLogin where User_Name= {user_name}"
-            if check_user:
-                usr = user_name
-                pas = self.cur.execute(f"select Password from UserLogin where User_Name={user_name}")
-                mail = self.cur.execute(f"select Email_ID from UserLogin where User_Name={user_name}")
-                data = {
-                    "password_hash": pas,
-                    "user_name": usr,
-                    "user_email": mail,
-                }
-                print (data) # debugging purpose 
-                return data 
-            
-            else:
+            if not check_user:
                 print("user Does not exist")
                 return False
-            # connect to mariadb somehow.
-            
-
-
-            # check if the user exists using self.connection_obj or something.
-            # if the user exists, return the data you got.
-            # if user_exists:
-
-            #     return data
-            # else:
-            #     print("User does not exist")
-            #     return 0
+            else:
+                # assign the data to the dictionary.
+                self.user_data['user_name'] = user_name
+                self.user_data['user_pass_hash'] = self.cur.execute(
+                    f"select Password from UserLogin where User_Name={user_name}"
+                )
+                self.user_data['user_email'] = self.cur.execute(
+                    f"select Email_ID from UserLogin where User_Name={user_name}"
+                )
+                return True
+        
 
         def update_login_table(self, user_name, password_hash, user_email):
             """
@@ -122,4 +110,3 @@
             stores the data of the top 10 scores in the self.top_scores dictionary. 
             """
             pass
-

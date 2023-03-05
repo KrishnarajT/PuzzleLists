@@ -19,7 +19,8 @@ import os
 import constants as ct
 from send_mail import send_mail
 from security import find_hash
-from database_manager import get_user_data
+from database_manager import database_manager
+
 
 class Worker(QObject):
     #     finished = pyqtSignal()
@@ -53,6 +54,7 @@ class Ui_Puzzlelists(QMainWindow):
         self.generated_otp = "000000"
         self.user_name = ""
         self.user_email = ""
+        self.dbms = database_manager()
 
         # calling functions
         self.makeFonts()
@@ -153,12 +155,17 @@ class Ui_Puzzlelists(QMainWindow):
             self.signup_remark_lbl.setText("Incorrect Email!")
 
     def verify_login(self):
-        self.user_name = self.login_enterName_lineedit.text()
+        self.user_name = self.login_enterName_lbl.text()
         self.user_pass_hash = find_hash(self.login_enterPass_lineedit.text())
-        
-    def check_existance_of_user(self):
-        
-        
+        if self.dbms.get_user_data(self.user_name):
+            if self.user_pass_hash == self.dbms.get_user_data(self.user_name)[1]:
+                self.dbms.find_total_score()
+                self.login_remark_lbl.setText("Login Successful!")
+                self.change_Screen(screen_number=3)
+            else: 
+                self.login_remark_lbl.setText("Incorrect Password!")
+        else:
+            self.login_remark_lbl.setText("User does not exist!")
 
     def setupUi(self):
         # setting icons
@@ -183,7 +190,7 @@ class Ui_Puzzlelists(QMainWindow):
         self.Login.setObjectName("Login")
 
         self.login_newUser_btn = QtWidgets.QPushButton(parent=self.Login)
-        self.login_newUser_btn.setGeometry(QtCore.QRect(630, 630, 350, 60))
+        self.login_newUser_btn.setGeometry(QtCore.QRect(630, 650, 350, 60))
         self.login_newUser_btn.setFont(
             QFont(self.games_played_Font, pointSize=20, weight=50)
         )
@@ -194,7 +201,7 @@ class Ui_Puzzlelists(QMainWindow):
         self.login_newUser_btn.clicked.connect(lambda: self.change_Screen(1))
 
         self.login_forgotPass_btn = QtWidgets.QPushButton(parent=self.Login)
-        self.login_forgotPass_btn.setGeometry(QtCore.QRect(280, 630, 350, 60))
+        self.login_forgotPass_btn.setGeometry(QtCore.QRect(290, 650, 350, 60))
         self.login_forgotPass_btn.setFont(
             QFont(self.games_played_Font, pointSize=20, weight=50)
         )
@@ -245,7 +252,7 @@ class Ui_Puzzlelists(QMainWindow):
         self.login_welcome_lbl.setObjectName("login_welcome_lbl")
 
         self.login_Begin_btn = QtWidgets.QPushButton(parent=self.Login)
-        self.login_Begin_btn.setGeometry(QtCore.QRect(400, 470, 511, 121))
+        self.login_Begin_btn.setGeometry(QtCore.QRect(400, 460, 511, 121))
         sizePolicy = QtWidgets.QSizePolicy(
             QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Minimum
         )
@@ -277,6 +284,15 @@ class Ui_Puzzlelists(QMainWindow):
         self.login_enterName_lineedit.setCursorPosition(0)
         self.login_enterName_lineedit.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.login_enterName_lineedit.setObjectName("login_enterName_lineedit")
+
+        self.login_remark_lbl = QtWidgets.QLabel(parent=self.Login)
+        self.login_remark_lbl.setObjectName("login_remark_lbl")
+        self.login_remark_lbl.setGeometry(QtCore.QRect(300, 600, 711, 41))
+        self.login_remark_lbl.setFont(
+            QFont(self.games_played_Font, pointSize=22, weight=50)
+        )
+        self.login_remark_lbl.setStyleSheet("background: None;\n" "color: white;")
+        self.login_remark_lbl.setAlignment(Qt.AlignCenter)
 
         ###################### SIGNUP PAGE #########################
 
