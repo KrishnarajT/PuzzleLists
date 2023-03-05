@@ -1,0 +1,11 @@
+make database name Puzzlelists
+
+#commands to create table
+# user info table
+create table UserLogin (User_ID integer, User_Name varchar(50), Password varchar(50), Email_ID varchar(50) , Primary key (User_ID));
+
+#games score table
+
+create table GameSocres (User_ID integer, Snake integer, 2048 integer, Tetris integer, Space_wars integer, Icy integer, Foreign key (User_ID) References UserLogin(User_ID))
+
+
