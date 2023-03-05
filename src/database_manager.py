@@ -4,7 +4,6 @@ import sys
 import mariadb
 
 
-
 class database_manager:
     """class to manage all database related tasks."""
 
@@ -13,7 +12,29 @@ class database_manager:
         # here this thing is not instantly called coz we wont be multithreading the creation of the object,
         # only rather its methods.
         # self.connection_obj = None
+        self.user_game_scores = {
+            '2048' : 0,
+            'Icy' : 0,  
+            'snake': 0,
+            'tetris': 0,
+            'space wars': 0,
+        }
+        self.user_data = {
+            "user_name": None,
+            "user_email": None,
+            "user_pass_hash": None
+        }
+        self.total_score = self.find_total_score()
+        self.top_scores = None
         pass
+
+    def find_total_score(self):
+        """
+        returns the total score of the user.
+        """
+        self.total_score = 0
+        for game in self.user_game_scores:
+            self.total_score += self.user_game_scores[game]
 
     def connect(self):
         """forms connection with sql, and returns True.
@@ -21,19 +42,19 @@ class database_manager:
         Returns:
             _type_: _description_
         """
-        try: 
+        try:
             con = mariadb.connect(
-                user = "parth",
-                password = "4123",
-                host ="127.0.0.1",
-                port = 3306,
-                database="Puzzlelists"
-        )
+                user="parth",
+                password="4123",
+                host="127.0.0.1",
+                port=3306,
+                database="Puzzlelists",
+            )
         except mariadb.Error as ex:
             print(f"An error occurred while connecting to MariaDB: {ex}")
             sys.exit(1)
 
-        # get cursor 
+        # get cursor
         self.cur = con.cursor()
         # connected = True
         # if connected:
@@ -45,27 +66,24 @@ class database_manager:
 
     def get_user_data(self, user_name):
         """
-        returns the a dictionary containing information abotu the user if the user name is found.
-        if the password is not found, it returns 0, meaning the username doesnt exist.
+        If the user is present, it returns True and the data is stored in the self.user_data dictionary.
+        Else it returns False.
         """
         check_user = f"SELECT User_Name from UserLogin where User_Name= {user_name}"
         if not check_user:
             print("user Does not exist")
             return False
-        
         else:
-            usr = user_name
-            pas = self.cur.execute(f"select Password from UserLogin where User_Name={user_name}")
-            mail = self.cur.execute(f"select Email_ID from UserLogin where User_Name={user_name}")
-            data = {
-                "password_hash": pas,
-                "user_name": usr,
-                "user_email": mail,
-            }
-            return data 
+            # assign the data to the dictionary.
+            self.user_data['user_name'] = user_name
+            self.user_data['user_pass_hash'] = self.cur.execute(
+                f"select Password from UserLogin where User_Name={user_name}"
+            )
+            self.user_data['user_email'] = self.cur.execute(
+                f"select Email_ID from UserLogin where User_Name={user_name}"
+            )
+            return True
         # connect to mariadb somehow.
-        
-
 
         # check if the user exists using self.connection_obj or something.
         # if the user exists, return the data you got.
@@ -80,11 +98,17 @@ class database_manager:
         """
         updates the database with the new user data.
         """
-        
+
         pass
 
     def update_scores(self, user_name, score, game):
         """
         updates the database with the new user data.
+        """
+        pass
+
+    def get_top_scores(self):
+        """
+        stores the data of the top 10 scores in the self.top_scores dictionary. 
         """
         pass
