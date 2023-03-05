@@ -1,4 +1,8 @@
 # This is the file that manages all database related tasks.
+# import mysql.connector
+import sys
+import mariadb
+
 
 
 class database_manager:
@@ -8,7 +12,7 @@ class database_manager:
         # initialize some stuff
         # here this thing is not instantly called coz we wont be multithreading the creation of the object,
         # only rather its methods.
-        self.connection_obj = None
+        # self.connection_obj = None
         pass
 
     def connect(self):
@@ -17,41 +21,66 @@ class database_manager:
         Returns:
             _type_: _description_
         """
-        connected = True
-        if connected:
-            # defining the object here.
-            self.connection_obj = None
-            return True
-        else:
-            return False
+        try: 
+            con = mariadb.connect(
+                user = "parth",
+                password = "4123",
+                host ="127.0.0.1",
+                port = 3306,
+                database="Puzzlelists"
+        )
+        except mariadb.Error as ex:
+            print(f"An error occurred while connecting to MariaDB: {ex}")
+            sys.exit(1)
+
+        # get cursor 
+        self.cur = con.cursor()
+        # connected = True
+        # if connected:
+        #     # defining the object here.
+        #     self.connection_obj = None
+        #     return True
+        # else:
+        #     return False
 
     def get_user_data(self, user_name):
         """
         returns the a dictionary containing information abotu the user if the user name is found.
         if the password is not found, it returns 0, meaning the username doesnt exist.
         """
-
+        check_user = f"SELECT User_Name from UserLogin where User_Name= {user_name}"
+        if not check_user:
+            print("user Does not exist")
+            return False
+        
+        else:
+            usr = user_name
+            pas = self.cur.execute(f"select Password from UserLogin where User_Name={user_name}")
+            mail = self.cur.execute(f"select Email_ID from UserLogin where User_Name={user_name}")
+            data = {
+                "password_hash": pas,
+                "user_name": usr,
+                "user_email": mail,
+            }
+            return data 
         # connect to mariadb somehow.
-        user_exists = True
+        
+
 
         # check if the user exists using self.connection_obj or something.
         # if the user exists, return the data you got.
-        if user_exists:
-            data = {
-                "password_hash": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
-                "user_name": "username",
-                "user_email": "kpt.krishnaraj@gmail.com",
-            }
+        # if user_exists:
 
-            return data
-        else:
-            print("User does not exist")
-            return 0
+        #     return data
+        # else:
+        #     print("User does not exist")
+        #     return 0
 
     def update_login_table(self, user_name, password_hash, user_email):
         """
         updates the database with the new user data.
         """
+        
         pass
 
     def update_scores(self, user_name, score, game):
