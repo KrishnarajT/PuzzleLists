@@ -19,7 +19,7 @@ import os
 import constants as ct
 from send_mail import send_mail
 from security import find_hash
-from database_manager import get_user_data
+from database_manager import database_manager
 
 class Worker(QObject):
     #     finished = pyqtSignal()
@@ -53,6 +53,15 @@ class Ui_Puzzlelists(QMainWindow):
         self.generated_otp = "000000"
         self.user_name = ""
         self.user_email = ""
+        self.game_scores = {
+            '2048' : 0,
+            'Icy' : 0,  
+            'snake': 0,
+            'tetris': 0,
+            'space wars': 0,
+        }
+
+        self.dbms = database_manager()
 
         # calling functions
         self.makeFonts()
@@ -157,7 +166,11 @@ class Ui_Puzzlelists(QMainWindow):
         self.user_pass_hash = find_hash(self.login_enterPass_lineedit.text())
         
     def check_existance_of_user(self):
+        self.user_name = self.login_enterName_lbl
+        if self.dbms.get_user_data(self.user_name):
+            self.stackedWidget.setCurrentIndex(3)
         
+
         
 
     def setupUi(self):
