@@ -1,0 +1,3 @@
+QMainWindow{
+    background: url(images:login_bg_blur.jpg);
+}

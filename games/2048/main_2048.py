@@ -140,14 +140,6 @@ GAME_FONT = pygame.font.Font(
     os.path.join(os.getcwd(), "resources/fonts/", "kel.ttf"), 70
 )
 
-# INITIALIZING THE BG MUSIC
-
-pygame.mixer.music.load(os.path.join(os.getcwd(), "resources/audio", "BGM.ogg"))
-pygame.mixer.music.play()
-CLICK_SOUND = pygame.mixer.Sound(
-    os.path.join(os.getcwd(), "resources/audio", "SELECT1.ogg")
-)
-
 # INTITIALIZING THE IMAGES.
 
 BG_IMAGE = pygame.transform.scale(
@@ -716,6 +708,16 @@ def start_2048():
     # INITIALIZING THE WINDOW
     WIN = pygame.display.set_mode((WIDTH, HEIGHT), pygame.RESIZABLE)
     pygame.display.set_caption("2048")
+    
+    
+    # INITIALIZING THE BG MUSIC
+
+    pygame.mixer.music.load(os.path.join(os.getcwd(), "resources/audio", "BGM.ogg"))
+    pygame.mixer.music.play()
+    CLICK_SOUND = pygame.mixer.Sound(
+        os.path.join(os.getcwd(), "resources/audio", "SELECT1.ogg")
+    )
+
     
     start_Loop = True
     while start_Loop:

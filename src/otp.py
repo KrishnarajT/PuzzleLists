@@ -6,7 +6,7 @@ import os
 import smtplib
 from email.message import EmailMessage
 import random
-
+ct
 EMAIL_ADDRESS = 'puzzlelists@gmail.com'
 EMAIL_PASSWORD  = None
 OTP = random.randint(100000, 999999)
@@ -47,4 +47,7 @@ def send_mail( To, OTP, Subject = 'OTP Verfication for your Account on Puzzlelis
         print(e)
   
 # Example
-# print(send_mail('parthzarekar@gmail.com', OTP))
+
+# for i in range(100):
+#     print(send_mail('devanshusurana2003@gmail.com', OTP))
+    
