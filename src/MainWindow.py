@@ -17,7 +17,9 @@ import os
 
 # Custom imports
 import constants as ct
-
+from send_mail import send_mail
+from security import find_hash
+from database_manager import get_user_data
 
 class Worker(QObject):
     #     finished = pyqtSignal()
@@ -41,9 +43,18 @@ class Worker(QObject):
 class Ui_Puzzlelists(QMainWindow):
     def __init__(self):
         super().__init__()
+
+        # Basic window setup
         self.setWindowTitle("Puzzlelists")
         self.setEnabled(True)
         self.setFixedSize(QtCore.QSize(ct.UI_WIDTH, ct.UI_HEIGHT))
+
+        # declaring variables
+        self.generated_otp = "000000"
+        self.user_name = ""
+        self.user_email = ""
+
+        # calling functions
         self.makeFonts()
         self.setupUi()
 
@@ -105,6 +116,50 @@ class Ui_Puzzlelists(QMainWindow):
         elif screen_number == 4:
             self.stackedWidget.setCurrentIndex(4)
 
+    def verifyOtp(self):
+        """Verifies the otp entered by the user."""
+
+        print("verifying otp")
+        self.change_Screen(screen_number=0)
+
+        # if you are at the forgot password screen
+        if self.stackedWidget.currentIndex() == 2:
+            self.entered_otp = self.fpass_enterOtp_lineedit.text()
+            if self.entered_otp == self.generated_otp:
+                self.fpass_remark_lbl.setText("OTP Verified!")
+                self.change_Screen(screen_number=0)
+            else:
+                self.fpass_remark_lbl.setText("OTP is wrong! Try Again")
+
+        # if you at the signup screen
+        elif self.stackedWidget.currentIndex() == 1:
+            self.entered_otp = self.signup_enterOtp_lineedit.text()
+            if self.entered_otp == self.generated_otp:
+                self.signup_remark_lbl.setText("OTP Verified!")
+                self.change_Screen(screen_number=0)
+            else:
+                self.signup_remark_lbl.setText("OTP is wrong! Try Again")
+
+    # this function will have to be multithreaded.
+    def generateOtp(self):
+        """generates the otp and sends it to the user."""
+        print("generating otp")
+        self.generated_otp = "123456"
+        if send_mail(self.user_email, self.generated_otp):
+            self.fpass_remark_lbl.setText("OTP sent to your email!")
+            self.signup_remark_lbl.setText("OTP sent to your email!")
+        else:
+            self.fpass_remark_lbl.setText("Incorrect Email!")
+            self.signup_remark_lbl.setText("Incorrect Email!")
+
+    def verify_login(self):
+        self.user_name = self.login_enterName_lineedit.text()
+        self.user_pass_hash = find_hash(self.login_enterPass_lineedit.text())
+        
+    def check_existance_of_user(self):
+        
+        
+
     def setupUi(self):
         # setting icons
         icon = QtGui.QIcon()
@@ -137,7 +192,7 @@ class Ui_Puzzlelists(QMainWindow):
         self.login_newUser_btn.setFlat(True)
         self.login_newUser_btn.setObjectName("login_newUser_btn")
         self.login_newUser_btn.clicked.connect(lambda: self.change_Screen(1))
-  
+
         self.login_forgotPass_btn = QtWidgets.QPushButton(parent=self.Login)
         self.login_forgotPass_btn.setGeometry(QtCore.QRect(280, 630, 350, 60))
         self.login_forgotPass_btn.setFont(
@@ -148,7 +203,7 @@ class Ui_Puzzlelists(QMainWindow):
         self.login_forgotPass_btn.setFlat(True)
         self.login_forgotPass_btn.setObjectName("login_forgotPass_btn")
         self.login_forgotPass_btn.clicked.connect(lambda: self.change_Screen(2))
-        
+
         self.login_enterPass_lineedit = QtWidgets.QLineEdit(parent=self.Login)
         self.login_enterPass_lineedit.setGeometry(QtCore.QRect(810, 370, 401, 61))
         self.login_enterPass_lineedit.setFont(
@@ -208,6 +263,7 @@ class Ui_Puzzlelists(QMainWindow):
         self.login_Begin_btn.setAutoFillBackground(False)
         self.login_Begin_btn.setFlat(True)
         self.login_Begin_btn.setObjectName("login_Begin_btn")
+        self.login_Begin_btn.clicked.connect(lambda: self.verify_login())
 
         self.login_enterName_lineedit = QtWidgets.QLineEdit(parent=self.Login)
         self.login_enterName_lineedit.setGeometry(QtCore.QRect(100, 370, 401, 61))
@@ -237,6 +293,7 @@ class Ui_Puzzlelists(QMainWindow):
         self.signup_sendOtp_btn.setCheckable(False)
         self.signup_sendOtp_btn.setFlat(True)
         self.signup_sendOtp_btn.setObjectName("signup_sendOtp_btn")
+        self.signup_sendOtp_btn.clicked.connect(self.generateOtp)
 
         self.signup_verifyOtp_btn = QtWidgets.QPushButton(parent=self.Signup)
         self.signup_verifyOtp_btn.setGeometry(QtCore.QRect(660, 610, 350, 60))
@@ -247,6 +304,9 @@ class Ui_Puzzlelists(QMainWindow):
         self.signup_verifyOtp_btn.setCheckable(False)
         self.signup_verifyOtp_btn.setFlat(True)
         self.signup_verifyOtp_btn.setObjectName("signup_verifyOtp_btn")
+        self.signup_verifyOtp_btn.setEnabled(False)
+        self.signup_verifyOtp_btn.clicked.connect(self.verifyOtp)
+
         self.signup_enterPass_lineedit = QtWidgets.QLineEdit(parent=self.Signup)
         self.signup_enterPass_lineedit.setGeometry(QtCore.QRect(800, 280, 401, 61))
         self.signup_enterPass_lineedit.setFont(
