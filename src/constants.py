@@ -27,12 +27,7 @@ GAME_PRICES = {
     GAMES[4]: 0,
 }
 
-# Fonts
-
-
 # Database related
 
-
 # UI Related
-
 ICON = os.path.join(ROOT_DIR, "resources/logo/icon.svg")

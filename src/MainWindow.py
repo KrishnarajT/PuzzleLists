@@ -3,6 +3,7 @@
 
 # Pyqt imports
 
+import random
 from PyQt6 import QtCore, QtGui, QtWidgets
 from PyQt6 import QtCore, QtGui, QtWidgets
 from PyQt6.QtCore import QObject, Qt, QThread, QUrl, pyqtSlot
@@ -24,7 +25,7 @@ import game_caller as gc
 
 
 class Worker(QObject):
-    #     finished = pyqtSignal()
+    finished_sending_mail = pyqtSignal()
     #     progress = pyqtSignal(int)
 
     #     def run(self, requiredGraphs, graphWordsList, graphDestPath, filePath, progressBar, progressLabel, mainTabs, labels, messaging_app):
@@ -68,7 +69,7 @@ class Ui_Puzzlelists(QMainWindow):
         cp = self.screen().availableGeometry().center()
         qr.moveCenter(cp)
         self.move(qr.topLeft())
-        
+
     def makeFonts(self):
         # Games Played Font
         id = QtGui.QFontDatabase.addApplicationFont(
@@ -141,6 +142,7 @@ class Ui_Puzzlelists(QMainWindow):
             self.entered_otp = self.fpass_enterOtp_lineedit.text()
             if self.entered_otp == self.generated_otp:
                 self.fpass_remark_lbl.setText("OTP Verified!")
+                self.fpass_verifyOtp_btn.setEnabled(False)
                 self.change_screen(screen_number=0)
             else:
                 self.fpass_remark_lbl.setText("OTP is wrong! Try Again")
@@ -150,23 +152,39 @@ class Ui_Puzzlelists(QMainWindow):
             self.entered_otp = self.signup_enterOtp_lineedit.text()
             if self.entered_otp == self.generated_otp:
                 self.signup_remark_lbl.setText("OTP Verified!")
+                self.signup_verifyOtp_btn.setEnabled(False)
                 self.change_screen(screen_number=0)
             else:
                 self.signup_remark_lbl.setText("OTP is wrong! Try Again")
 
     # this function will have to be multithreaded.
-    def generateOtp(self):
+    def generateOtp_andSendMail(self):
         """generates the otp and sends it to the user."""
         print("generating otp")
-        self.generated_otp = "123456"
-        if self.stackedWidget.currentIndex() == 2:
-            self.user_email = self.fpass_enterEmail_lineedit.text()
-        elif self.stackedWidget.currentIndex() == 1:
-            self.user_email = self.signup_enterEmail_lineedit.text()
 
+        if self.stackedWidget.currentIndex() == 2:
+            self.user_name = self.fpass_enterName_lineedit.text()
+            self.user_pass_hash = self.fpass_enterPass_lineedit.text()
+            self.user_email = self.fpass_enterEmail_lineedit.text()
+            if self.user_name == "" or self.user_pass_hash == "":
+                self.fpass_remark_lbl.setText("Please fill all the fields!")
+                return
+
+        elif self.stackedWidget.currentIndex() == 1:
+            self.user_name = self.signup_enterName_lineedit.text()
+            self.user_pass_hash = self.signup_enterPass_lineedit.text()
+            self.user_email = self.signup_enterEmail_lineedit.text()
+            if self.user_name == "" or self.user_pass_hash == "":
+                self.signup_remark_lbl.setText("Please fill all the fields!")
+                return
+
+        self.generated_otp = random.randint(100000, 999999)
+        
         if send_mail(self.user_email, self.generated_otp):
             self.fpass_remark_lbl.setText("OTP sent to your email!")
             self.signup_remark_lbl.setText("OTP sent to your email!")
+            self.signup_verifyOtp_btn.setEnabled(True)
+            self.fpass_verifyOtp_btn.setEnabled(True)
         else:
             self.fpass_remark_lbl.setText("Incorrect Email!")
             self.signup_remark_lbl.setText("Incorrect Email!")
@@ -384,7 +402,7 @@ class Ui_Puzzlelists(QMainWindow):
         self.signup_sendOtp_btn.setCheckable(False)
         self.signup_sendOtp_btn.setFlat(True)
         self.signup_sendOtp_btn.setObjectName("signup_sendOtp_btn")
-        self.signup_sendOtp_btn.clicked.connect(self.generateOtp)
+        self.signup_sendOtp_btn.clicked.connect(self.generateOtp_andSendMail)
 
         self.signup_verifyOtp_btn = QtWidgets.QPushButton(parent=self.Signup)
         self.signup_verifyOtp_btn.setGeometry(QtCore.QRect(660, 610, 350, 60))
@@ -603,7 +621,7 @@ class Ui_Puzzlelists(QMainWindow):
         self.fpass_sendOtp_btn.setCheckable(False)
         self.fpass_sendOtp_btn.setFlat(True)
         self.fpass_sendOtp_btn.setObjectName("fpass_sendOtp_btn")
-        self.fpass_sendOtp_btn.clicked.connect(self.generateOtp)
+        self.fpass_sendOtp_btn.clicked.connect(self.generateOtp_andSendMail)
 
         self.fpass_verifyOtp_btn = QtWidgets.QPushButton(parent=self.ForgotPass)
         self.fpass_verifyOtp_btn.setGeometry(QtCore.QRect(660, 610, 350, 60))
@@ -615,6 +633,7 @@ class Ui_Puzzlelists(QMainWindow):
         self.fpass_verifyOtp_btn.setFlat(True)
         self.fpass_verifyOtp_btn.setObjectName("fpass_verifyOtp_btn")
         self.fpass_verifyOtp_btn.clicked.connect(self.verifyOtp)
+        self.fpass_verifyOtp_btn.setEnabled(False)
 
         self.fpass_remark_lbl = QtWidgets.QLabel(parent=self.ForgotPass)
         self.fpass_remark_lbl.setGeometry(QtCore.QRect(310, 560, 711, 41))
