@@ -39,8 +39,8 @@ class database_manager:
         """
         try:
             self.connection = mariadb.connect(
-                user="krishnaraj",
-                password="mariamaria",
+                user="parth",
+                password="4123",
                 host="127.0.0.1",
                 port=3306,
                 database="Puzzlelists",
@@ -77,7 +77,7 @@ class database_manager:
             self.user_data['user_pass_hash'] = user_data_from_maria[1]
             self.user_data['user_email'] = user_data_from_maria[2]
             self.user_data['user_score'] = user_data_from_maria[3]
-            self.user_data['user_games'] = user_data_from_maria[4].strip('()').strip(" \'").split(',')
+            self.user_data['user_games'] = user_data_from_maria[4].strip('()').split(',')
             print(self.user_data)
             return True
         
