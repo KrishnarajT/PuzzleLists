@@ -13,28 +13,21 @@ class database_manager:
         # only rather its methods.
         # self.connection_obj = None
         self.user_game_scores = {
-            '2048' : 0,
-            'Icy' : 0,  
-            'snake': 0,
-            'tetris': 0,
-            'space wars': 0,
+            "2048": 0,
+            "Icy": 0,
+            "snake": 0,
+            "tetris": 0,
+            "space wars": 0,
         }
         self.user_data = {
             "user_name": None,
             "user_email": None,
-            "user_pass_hash": None
+            "user_pass_hash": None,
+            "user_score": 0,
+            "user_games": [],
         }
-        self.total_score = self.find_total_score()
         self.top_scores = None
-        self.games_owned_by_user = ['snake', 'tetris']
-
-    def find_total_score(self):
-        """
-        returns the total score of the user.
-        """
-        self.total_score = 0
-        for game in self.user_game_scores:
-            self.total_score += self.user_game_scores[game]
+        self.games_owned_by_user = ["snake", "tetris"]
 
     def connect(self):
         """forms connection with sql, and returns True.
@@ -75,11 +68,11 @@ class database_manager:
             return False
         else:
             # assign the data to the dictionary.
-            self.user_data['user_name'] = user_name
-            self.user_data['user_pass_hash'] = self.cur.execute(
+            self.user_data["user_name"] = user_name
+            self.user_data["user_pass_hash"] = self.cur.execute(
                 f"select Password from UserLogin where User_Name={user_name}"
             )
-            self.user_data['user_email'] = self.cur.execute(
+            self.user_data["user_email"] = self.cur.execute(
                 f"select Email_ID from UserLogin where User_Name={user_name}"
             )
             return True
@@ -101,14 +94,14 @@ class database_manager:
 
         pass
 
-    def update_scores(self, user_name, score, game):
+    def update_database(self):
         """
-        updates the database with the new user data.
+        updates the entire database with whatever information that we have at the moment.
         """
         pass
 
     def get_top_scores(self):
         """
-        stores the data of the top 10 scores in the self.top_scores dictionary. 
+        stores the data of the top 10 scores in the self.top_scores dictionary.
         """
         pass

@@ -17,4 +17,5 @@ from main_2048 import start_2048
 if __name__ == "__main__":
     game = snake_game()
     game.run()
+    
     pass

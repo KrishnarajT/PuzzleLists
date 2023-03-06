@@ -56,18 +56,19 @@ class Ui_Puzzlelists(QMainWindow):
         self.user_name = ""
         self.user_email = ""
         self.dbms = database_manager()
-        self.game_price_requirements = {
-            "tetris": 0,
-            "snake": 0,
-            "2048": 200,
-            "space wars": 300,
-            "icy": 100,
-        }
-        
+        self.current_game = None
+
         # calling functions
         self.makeFonts()
         self.setupUi()
+        self.center()
 
+    def center(self):
+        qr = self.frameGeometry()
+        cp = self.screen().availableGeometry().center()
+        qr.moveCenter(cp)
+        self.move(qr.topLeft())
+        
     def makeFonts(self):
         # Games Played Font
         id = QtGui.QFontDatabase.addApplicationFont(
@@ -103,7 +104,7 @@ class Ui_Puzzlelists(QMainWindow):
             print("Font Error")
         self.squid_game_Font = QtGui.QFontDatabase.applicationFontFamilies(id)[0]
 
-    def change_Screen(self, screen_number):
+    def change_screen(self, screen_number):
         """changes the stacked widget screen.
 
         Args:
@@ -122,8 +123,11 @@ class Ui_Puzzlelists(QMainWindow):
         elif screen_number == 2:
             self.stackedWidget.setCurrentIndex(2)
         elif screen_number == 3:
+            # update the coins so we get the latest value before purchase.
+            self.chgame_coins_lbl.setText(str(self.dbms.user_data.get("user_score")))
             self.stackedWidget.setCurrentIndex(3)
         elif screen_number == 4:
+            self.display_highscores()
             self.stackedWidget.setCurrentIndex(4)
 
     def verifyOtp(self):
@@ -137,7 +141,7 @@ class Ui_Puzzlelists(QMainWindow):
             self.entered_otp = self.fpass_enterOtp_lineedit.text()
             if self.entered_otp == self.generated_otp:
                 self.fpass_remark_lbl.setText("OTP Verified!")
-                self.change_Screen(screen_number=0)
+                self.change_screen(screen_number=0)
             else:
                 self.fpass_remark_lbl.setText("OTP is wrong! Try Again")
 
@@ -146,7 +150,7 @@ class Ui_Puzzlelists(QMainWindow):
             self.entered_otp = self.signup_enterOtp_lineedit.text()
             if self.entered_otp == self.generated_otp:
                 self.signup_remark_lbl.setText("OTP Verified!")
-                self.change_Screen(screen_number=0)
+                self.change_screen(screen_number=0)
             else:
                 self.signup_remark_lbl.setText("OTP is wrong! Try Again")
 
@@ -173,51 +177,70 @@ class Ui_Puzzlelists(QMainWindow):
         self.user_pass_hash = find_hash(self.login_enterPass_lineedit.text())
         if self.dbms.get_user_data(self.user_name):
             if self.user_pass_hash == self.dbms.get_user_data(self.user_name)[1]:
-                self.dbms.find_total_score()
                 self.login_remark_lbl.setText("Login Successful!")
-                self.dbms.find_total_score()
-                self.chgame_coins_lbl.setText(str(self.dbms.total_score))
-                self.change_Screen(screen_number=3)
+                self.chgame_coins_lbl.setText(
+                    str(self.dbms.user_data.get("user_score"))
+                )
+                self.change_screen(screen_number=3)
             else:
                 self.login_remark_lbl.setText("Incorrect Password!")
         else:
             self.login_remark_lbl.setText("User does not exist!")
 
-    # this function will have to be multithreaded.
-    def change_games(self, game):
-        self.dbms.find_total_score()
-        self.chgame_coins_lbl.setText(str(self.dbms.total_score))
-        coins = int(self.chgame_coins_lbl.text())
+    def change_games(self):
+        """changes the game that is being played, and updates the new scores in the database."""
 
-        if game not in self.dbms.user_game_scores:
-            if coins >= self.game_price_requirements[game]:
-                
-                self.dbms.update_user_game_scores()
-                self.dbms.find_total_score()
-                self.chgame_coins_lbl.setText(str(self.dbms.total_score))
-
-
-        if game == "2048" and coins >= self.game_price_requirements[game]:
+        self.change_screen(screen_number=3)
+        if self.current_game == ct.GAMES[0]:
             self.isVisible(False)
-            self.dbms.user_game_scores[game] += gc.start_2048()
+            self.dbms.user_game_scores[self.current_game] += gc.start_space_wars()
             self.isVisible(True)
-        elif game == "Tetris" >= self.game_price_requirements[game]:
+        elif self.current_game == ct.GAMES[1]:
+            self.isVisible(False)
+            self.dbms.user_game_scores[self.current_game] += gc.start_2048()
+            self.isVisible(True)
+        elif self.current_game == ct.GAMES[2]:
+            self.isVisible(False)
+            self.dbms.user_game_scores[self.current_game] += gc.start_icy()
+            self.isVisible(True)
+        elif self.current_game == ct.GAMES[3]:
+            self.isVisible(False)
+            self.dbms.user_game_scores[self.current_game] += gc.start_snake()
+            self.isVisible(True)
+        elif self.current_game == ct.GAMES[4]:
             self.isVisible(False)
             tetris = gc.TetrisApp()
-            self.dbms.user_game_scores[game] += tetris.start()
+            self.dbms.user_game_scores[self.current_game] += tetris.start()
             self.isVisible(True)
-        elif game == "Snake" >= self.game_price_requirements[game]:
-            self.isVisible(False)
-            self.dbms.user_game_scores[game] += gc.start_snake()
-            self.isVisible(True)
-        elif game == "space wars" >= self.game_price_requirements[game]:
-            self.isVisible(False)
-            self.dbms.user_game_scores[game] += gc.start_space_wars()
-            self.isVisible(True)
-        elif game == "icy" >= self.game_price_requirements[game]:
-            self.isVisible(False)
-            self.dbms.user_game_scores[game] += gc.start_icy()
-            self.isVisible(True)
+
+        # now that the game has been played at this point, and the scores are with us, we can update the database, so that if the user now wishes to see the highscores, he can see the updated scores.
+        self.dbms.update_database()
+
+    # this function will have to be multithreaded.
+    def purchase_game(self, game):
+        """Checkes if the user has enough coins to purchase the game, and if
+        so, then launches that game after reducing the coins, and otherwise does nothing.
+        Args:
+            game (str): title of the game.
+        """
+        coins = self.dbms.user_data.get("user_score")
+
+        if game not in self.dbms.user_data.get("user_games"):
+            if coins >= ct.GAME_PRICES[game]:
+                self.dbms.user_data["user_games"].append(game)
+                self.dbms.user_data["user_score"] -= ct.GAME_PRICES[game]
+                self.chgame_coins_lbl.setText(str(self.dbms.user_data["user_score"]))
+                self.dbms.update_database()
+
+    def display_highscores(self):
+        """Displays the highscores of the current game on the column view."""
+        # first get the highscores
+        self.dbms.get_top_scores()
+
+        # now display the highscores in the table.
+        # self.hgscore_score_colview.setData(self.dbms.top_scores.get(self.current_game))
+
+        # figure out some way to display the highscores of the current game.
 
     def setupUi(self):
         # setting icons
@@ -250,7 +273,7 @@ class Ui_Puzzlelists(QMainWindow):
         self.login_newUser_btn.setCheckable(False)
         self.login_newUser_btn.setFlat(True)
         self.login_newUser_btn.setObjectName("login_newUser_btn")
-        self.login_newUser_btn.clicked.connect(lambda: self.change_Screen(1))
+        self.login_newUser_btn.clicked.connect(lambda: self.change_screen(1))
 
         self.login_forgotPass_btn = QtWidgets.QPushButton(parent=self.Login)
         self.login_forgotPass_btn.setGeometry(QtCore.QRect(290, 650, 350, 60))
@@ -261,7 +284,7 @@ class Ui_Puzzlelists(QMainWindow):
         self.login_forgotPass_btn.setCheckable(False)
         self.login_forgotPass_btn.setFlat(True)
         self.login_forgotPass_btn.setObjectName("login_forgotPass_btn")
-        self.login_forgotPass_btn.clicked.connect(lambda: self.change_Screen(2))
+        self.login_forgotPass_btn.clicked.connect(lambda: self.change_screen(2))
 
         self.login_enterPass_lineedit = QtWidgets.QLineEdit(parent=self.Login)
         self.login_enterPass_lineedit.setGeometry(QtCore.QRect(810, 370, 401, 61))
@@ -344,7 +367,7 @@ class Ui_Puzzlelists(QMainWindow):
             QFont(self.games_played_Font, pointSize=22, weight=50)
         )
         self.login_remark_lbl.setStyleSheet("background: None;\n" "color: white;")
-        self.login_remark_lbl.setAlignment(Qt.AlignCenter)
+        self.login_remark_lbl.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
 
         ###################### SIGNUP PAGE #########################
 
@@ -580,7 +603,7 @@ class Ui_Puzzlelists(QMainWindow):
         self.fpass_sendOtp_btn.setCheckable(False)
         self.fpass_sendOtp_btn.setFlat(True)
         self.fpass_sendOtp_btn.setObjectName("fpass_sendOtp_btn")
-        self.fpass_sendOtp_btn.clicked.connect(self.sendOtp)
+        self.fpass_sendOtp_btn.clicked.connect(self.generateOtp)
 
         self.fpass_verifyOtp_btn = QtWidgets.QPushButton(parent=self.ForgotPass)
         self.fpass_verifyOtp_btn.setGeometry(QtCore.QRect(660, 610, 350, 60))
@@ -711,7 +734,7 @@ class Ui_Puzzlelists(QMainWindow):
         self.chgame_game1_btn.setDefault(False)
         self.chgame_game1_btn.setFlat(True)
         self.chgame_game1_btn.setObjectName("chgame_game1_btn")
-        self.chgame_game1_btn.clicked.connect(lambda: self.change_games("space wars"))
+        self.chgame_game1_btn.clicked.connect(lambda: self.purchase_game(ct.GAMES[0]))
 
         self.chgame_game2_btn = QtWidgets.QPushButton(parent=self.ChooseGame)
         self.chgame_game2_btn.setGeometry(QtCore.QRect(920, 330, 191, 71))
@@ -738,7 +761,7 @@ class Ui_Puzzlelists(QMainWindow):
         )
         self.chgame_game2_btn.setFlat(True)
         self.chgame_game2_btn.setObjectName("chgame_game2_btn")
-        self.chgame_game2_btn.clicked.connect(lambda: self.change_games("2048"))
+        self.chgame_game2_btn.clicked.connect(lambda: self.purchase_game(ct.GAMES[1]))
 
         self.chgame_game3_btn = QtWidgets.QPushButton(parent=self.ChooseGame)
         self.chgame_game3_btn.setGeometry(QtCore.QRect(920, 410, 191, 71))
@@ -765,7 +788,7 @@ class Ui_Puzzlelists(QMainWindow):
         )
         self.chgame_game3_btn.setFlat(True)
         self.chgame_game3_btn.setObjectName("chgame_game3_btn")
-        self.chgame_game3_btn.clicked.connect(lambda: self.change_games("icy"))
+        self.chgame_game3_btn.clicked.connect(lambda: self.purchase_game(ct.GAMES[2]))
 
         self.chgame_game4_btn = QtWidgets.QPushButton(parent=self.ChooseGame)
         self.chgame_game4_btn.setGeometry(QtCore.QRect(920, 490, 191, 71))
@@ -792,7 +815,7 @@ class Ui_Puzzlelists(QMainWindow):
         )
         self.chgame_game4_btn.setFlat(True)
         self.chgame_game4_btn.setObjectName("chgame_game4_btn")
-        self.chgame_game4_btn.clicked.connect(lambda: self.change_games("snake"))
+        self.chgame_game4_btn.clicked.connect(lambda: self.purchase_game(ct.GAMES[3]))
 
         self.chgame_game5_btn = QtWidgets.QPushButton(parent=self.ChooseGame)
         self.chgame_game5_btn.setGeometry(QtCore.QRect(920, 570, 191, 71))
@@ -819,7 +842,7 @@ class Ui_Puzzlelists(QMainWindow):
         )
         self.chgame_game5_btn.setFlat(True)
         self.chgame_game5_btn.setObjectName("chgame_game5_btn")
-        self.chgame_game5_btn.clicked.connect(lambda: self.change_games("tetris"))
+        self.chgame_game5_btn.clicked.connect(lambda: self.purchase_game(ct.GAMES[4]))
 
         self.chgame_viewScore_btn = QtWidgets.QPushButton(parent=self.ChooseGame)
         self.chgame_viewScore_btn.setGeometry(QtCore.QRect(10, 10, 331, 51))
@@ -830,6 +853,7 @@ class Ui_Puzzlelists(QMainWindow):
         self.chgame_viewScore_btn.setCheckable(False)
         self.chgame_viewScore_btn.setFlat(True)
         self.chgame_viewScore_btn.setObjectName("chgame_viewScore_btn")
+        self.chgame_viewScore_btn.clicked.connect(lambda: self.change_screen(4))
 
         ############################## Highscore Page ###################
 
@@ -854,6 +878,8 @@ class Ui_Puzzlelists(QMainWindow):
         self.hgscore_backToGame_btn.setCheckable(False)
         self.hgscore_backToGame_btn.setFlat(True)
         self.hgscore_backToGame_btn.setObjectName("hgscore_backToGame_btn")
+        self.hgscore_backToGame_btn.clicked.connect(lambda: self.change_screen(3))
+
         self.hgscore_score_colview = QtWidgets.QColumnView(parent=self.HighScores)
         self.hgscore_score_colview.setGeometry(QtCore.QRect(220, 170, 891, 441))
         font = QtGui.QFont()
