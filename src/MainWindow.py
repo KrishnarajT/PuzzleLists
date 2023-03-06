@@ -68,7 +68,7 @@ class Ui_Puzzlelists(QMainWindow):
         self.center()
 
     def make_threads(self):
-        
+        pass
 
     def center(self):
         qr = self.frameGeometry()
@@ -126,8 +126,10 @@ class Ui_Puzzlelists(QMainWindow):
         if screen_number == 0:
             self.stackedWidget.setCurrentIndex(0)
         elif screen_number == 1:
+            self.signup_remark_lbl.setText("Fill All Fields to Continue")
             self.stackedWidget.setCurrentIndex(1)
         elif screen_number == 2:
+            self.fpass_remark_lbl.setText("Fill All Fields to Continue")
             self.stackedWidget.setCurrentIndex(2)
         elif screen_number == 3:
             # update the coins so we get the latest value before purchase.
@@ -141,21 +143,23 @@ class Ui_Puzzlelists(QMainWindow):
         """Verifies the otp entered by the user."""
 
         print("verifying otp")
+        print("generated otp: ", self.generated_otp)
         # self.change_Screen(screen_number=0)
 
         # if you are at the forgot password screen
         if self.stackedWidget.currentIndex() == 2:
-            self.entered_otp = self.fpass_enterOtp_lineedit.text()
+            self.entered_otp = int(self.fpass_enterOtp_lineedit.text())
             if self.entered_otp == self.generated_otp:
                 self.fpass_remark_lbl.setText("OTP Verified!")
                 self.fpass_verifyOtp_btn.setEnabled(False)
                 self.change_screen(screen_number=0)
+                self.dbms.update_database()
             else:
                 self.fpass_remark_lbl.setText("OTP is wrong! Try Again")
 
         # if you at the signup screen
         elif self.stackedWidget.currentIndex() == 1:
-            self.entered_otp = self.signup_enterOtp_lineedit.text()
+            self.entered_otp = int(self.signup_enterOtp_lineedit.text())
             if self.entered_otp == self.generated_otp:
                 self.signup_remark_lbl.setText("OTP Verified!")
                 self.signup_verifyOtp_btn.setEnabled(False)
@@ -166,7 +170,6 @@ class Ui_Puzzlelists(QMainWindow):
     # this function will have to be multithreaded.
     def generateOtp_andSendMail(self):
         """generates the otp and sends it to the user."""
-        print("generating otp")
 
         if self.stackedWidget.currentIndex() == 2:
             self.user_name = self.fpass_enterName_lineedit.text()
@@ -184,17 +187,17 @@ class Ui_Puzzlelists(QMainWindow):
                 self.signup_remark_lbl.setText("Please fill all the fields!")
                 return
 
+        print("generating otp")
         self.generated_otp = random.randint(100000, 999999)
         
-        # if send_mail(self.user_email, self.generated_otp):
-        #     self.fpass_remark_lbl.setText("OTP sent to your email!")
-        #     self.signup_remark_lbl.setText("OTP sent to your email!")
-        #     self.signup_verifyOtp_btn.setEnabled(True)
-        #     self.fpass_verifyOtp_btn.setEnabled(True)
-        # else:
-        #     self.fpass_remark_lbl.setText("Incorrect Email!")
-        #     self.signup_remark_lbl.setText("Incorrect Email!")
-
+        if send_mail(self.user_email, self.generated_otp):
+            self.fpass_remark_lbl.setText("OTP sent to your email!")
+            self.signup_remark_lbl.setText("OTP sent to your email!")
+            self.signup_verifyOtp_btn.setEnabled(True)
+            self.fpass_verifyOtp_btn.setEnabled(True)
+        else:
+            self.fpass_remark_lbl.setText("Incorrect Email!")
+            self.signup_remark_lbl.setText("Incorrect Email!")
 
     # this function will have to be multithreaded.
     def verify_login(self):
@@ -218,24 +221,29 @@ class Ui_Puzzlelists(QMainWindow):
         self.change_screen(screen_number=3)
         if self.current_game == ct.GAMES[0]:
             self.isVisible(False)
-            self.dbms.user_game_scores[self.current_game] += gc.start_space_wars()
+            self.dbms.user_game_scores[self.current_game] = gc.start_space_wars()
+            self.dbms.user_data['user_score'] += self.dbms.user_game_scores[self.current_game]
             self.isVisible(True)
         elif self.current_game == ct.GAMES[1]:
             self.isVisible(False)
-            self.dbms.user_game_scores[self.current_game] += gc.start_2048()
+            self.dbms.user_game_scores[self.current_game] = gc.start_2048()
+            self.dbms.user_data['user_score'] += self.dbms.user_game_scores[self.current_game]
             self.isVisible(True)
         elif self.current_game == ct.GAMES[2]:
             self.isVisible(False)
-            self.dbms.user_game_scores[self.current_game] += gc.start_icy()
+            self.dbms.user_game_scores[self.current_game] = gc.start_icy()
+            self.dbms.user_data['user_score'] += self.dbms.user_game_scores[self.current_game]
             self.isVisible(True)
         elif self.current_game == ct.GAMES[3]:
             self.isVisible(False)
-            self.dbms.user_game_scores[self.current_game] += gc.start_snake()
+            self.dbms.user_game_scores[self.current_game] = gc.start_snake()
+            self.dbms.user_data['user_score'] += self.dbms.user_game_scores[self.current_game]
             self.isVisible(True)
         elif self.current_game == ct.GAMES[4]:
             self.isVisible(False)
             tetris = gc.TetrisApp()
-            self.dbms.user_game_scores[self.current_game] += tetris.start()
+            self.dbms.user_game_scores[self.current_game] = tetris.start()
+            self.dbms.user_data['user_score'] += self.dbms.user_game_scores[self.current_game]
             self.isVisible(True)
 
         # now that the game has been played at this point, and the scores are with us, we can update the database, so that if the user now wishes to see the highscores, he can see the updated scores.
@@ -243,6 +251,7 @@ class Ui_Puzzlelists(QMainWindow):
 
     # this function will have to be multithreaded.
     def purchase_game(self, game):
+
         """Checkes if the user has enough coins to purchase the game, and if
         so, then launches that game after reducing the coins, and otherwise does nothing.
         Args:
@@ -927,6 +936,7 @@ class Ui_Puzzlelists(QMainWindow):
     def retranslateUi(self):
         _translate = QtCore.QCoreApplication.translate
         self.setWindowTitle(_translate("Puzzlelists", "Puzzlelists"))
+        self.login_remark_lbl.setText(_translate("Puzzlelists", "Fill Details and Press Begin!"))
         self.login_newUser_btn.setText(_translate("Puzzlelists", "New User? Join Us!"))
         self.login_forgotPass_btn.setText(_translate("Puzzlelists", "Forgot Password?"))
         self.login_enterName_lbl.setText(
@@ -1001,7 +1011,6 @@ class Ui_Puzzlelists(QMainWindow):
         self.hgscore_backToGame_btn.setText(
             _translate("Puzzlelists", "Back to Game Selection!")
         )
-
 
 # if __name__ == "__main__":
 #     import sys
