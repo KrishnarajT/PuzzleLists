@@ -2,7 +2,7 @@
 # import mysql.connector
 import sys
 import mariadb
-
+from security import find_hash
 
 class database_manager:
     """class to manage all database related tasks."""
@@ -20,13 +20,14 @@ class database_manager:
             "space wars": 0,
         }
         self.user_data = {
-            "user_name": None,
-            "user_email": None,
-            "user_pass_hash": None,
+            "user_name": 'abcd',
+            "user_email": 'abde@adfa',
+            "user_pass_hash": find_hash("password"),
             "user_score": 0,
-            "user_games": [],
+            "user_games": ["snake", "tetris"],
         }
         self.top_scores = None
+        self.cursor = None
         self.games_owned_by_user = ["snake", "tetris"]
 
     def connect_and_create_tables(self):
@@ -37,8 +38,8 @@ class database_manager:
         """
         try: 
             con = mariadb.connect(
-                user = "parth",
-                password = "4123",
+                user = "krishnaraj",
+                password = "mariamaria",
                 host ="127.0.0.1",
                 port = 3306,
                 database="Puzzlelists"
@@ -48,9 +49,9 @@ class database_manager:
             sys.exit(1)
 
         # get cursor 
-        self.cur = con.cursor()
-        self.cur.execute("Create table if not exists UserLogin(User_ID integer, User_Name varchar(50), Password varchar(50), Email_ID varchar(50), Credits int, User_Games varchar(200) Primary key (User_ID))")
-        self.cur.execute("Create table if not exists GameScores(User_ID integer, Snake integer, 2048 integer, Tetris integer, Space_wars integer, Icy integer, Foreign key (User_ID) References UserLogin(User_ID))")
+        self.cursor = con.cursor()
+        self.cursor.execute("Create table if not exists UserLogin(User_Name varchar(100), Password varchar(300), Email_ID varchar(50), Credits int, User_Games varchar(200), Primary key (User_Name))")
+        self.cursor.execute("Create table if not exists GameScores(User_Name varchar(100), Snake integer, `2048` integer, Tetris integer, Space_wars integer, Icy integer, Foreign key (User_Name) References UserLogin(User_Name))")
 
     def get_user_data(self, user_name):
         check_user = f"SELECT User_Name from UserLogin where User_Name= {user_name}"
@@ -60,27 +61,34 @@ class database_manager:
         else:
             # assign the data to the dictionary.
             self.user_data['user_name'] = user_name
-            self.user_data['user_pass_hash'] = self.cur.execute(
+            self.user_data['user_pass_hash'] = self.cursor.execute(
                 f"select Password from UserLogin where User_Name={user_name}"
             )
-            self.user_data['user_email'] = self.cur.execute(
+            self.user_data['user_email'] = self.cursor.execute(
                 f"select Email_ID from UserLogin where User_Name={user_name}"
             )
             return True
 
     def add_user(self):
-        # insert_new_user = f"insert IGNORE into UserLogin({user_name})"
-        cursor = mariadb.Connection.cursor(mariadb.Cursor.DictCursor)
-        cursor.execute(f"select User_Name from UserLogin where username = {self.user_data.get('user_name')}")
-        check = cursor.fetchone()
+        """Adds a new user to the database.
+        Returns:
+            Boolean : True if the new user was added successfully, False otherwise.
+        """        
+
+        check = self.cursor.execute(f"Insert into UserLogin values(\"{self.user_data.get('user_name')}\", \"{self.user_data.get('user_pass_hash')}\", \"{self.user_data.get('user_email')}\", {self.user_data.get('user_score')} ,\"{tuple(self.user_data.get('user_games'))}\")")
+        print(check)
 
         if check:
             print ("account already Exist")
-            return 0
+            return False
         else:
-            self.cur.execute(f"Insert into UserLogin(Null,{self.user_data.get('user_name')},{self.user_data.get('user_pass_hash')},{self.user_data.get('user_email')})")
             print("user registered")
+            return True
 
+    def update_user(self):
+        """updates the user data in the database.
+        """
+        pass
     def update_database(self):
         """
         updates the database with the new user data.
@@ -92,3 +100,9 @@ class database_manager:
         stores the data of the top 10 scores in the self.top_scores dictionary.
         """
         pass
+
+
+if __name__ == "__main__":
+    db = database_manager()
+    db.connect_and_create_tables()
+    db.add_user()
