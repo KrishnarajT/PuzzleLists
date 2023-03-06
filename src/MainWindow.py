@@ -196,15 +196,12 @@ class Ui_Puzzlelists(QMainWindow):
                 self.fpass_verifyOtp_btn.setEnabled(False)
                 self.dbms.user_data["user_name"] = self.user_name
                 self.dbms.user_data["user_email"] = self.user_email
-                # self.dbms.user_data["user_pass_hash"] = find_hash(self.user_pass_hash)
-                self.dbms.user_data["user_pass_hash"] = (self.user_pass_hash)
-
+                self.dbms.user_data["user_pass_hash"] = self.user_pass_hash
                 if self.dbms.update_user_password():
                     self.fpass_remark_lbl.setText("Password Changed!")
                 else: 
                     self.fpass_remark_lbl.setText("Couldnt Change Password!, Try Troubleshooting")                
                 self.change_screen(screen_number=0)
-                self.dbms.update_database()
             else:
                 self.fpass_remark_lbl.setText("OTP is wrong! Try Again")
                 self.fpass_verifyOtp_btn.setEnabled(True)
@@ -218,8 +215,8 @@ class Ui_Puzzlelists(QMainWindow):
                 self.dbms.user_data["user_name"] = self.user_name
                 self.dbms.user_data["user_email"] = self.user_email
                 self.dbms.user_data["user_score"] = 0
-                # self.dbms.user_data["user_pass_hash"] = find_hash(self.user_pass_hash)
                 self.dbms.user_data["user_pass_hash"] = self.user_pass_hash
+                print('created and inserted user_pass_hash: ', self.dbms.user_data.get('user_pass_hash'))
                 if self.dbms.insert_user():
                     print("user inserted")
                     self.signup_remark_lbl.setText("User Appended to Our PuzzleList!!")
@@ -256,7 +253,7 @@ class Ui_Puzzlelists(QMainWindow):
 
         print("generating otp")
         self.generated_otp = random.randint(100000, 999999)
-        
+        print("generated otp: ", self.generated_otp)
         if send_mail(self.user_email, self.generated_otp):
             self.fpass_remark_lbl.setText("OTP sent to your email!")
             self.signup_remark_lbl.setText("OTP sent to your email!")
@@ -269,11 +266,16 @@ class Ui_Puzzlelists(QMainWindow):
     # this function will have to be multithreaded.
     def verify_login(self):
         self.user_name = self.login_enterName_lineedit.text()
-        # self.user_pass_hash = find_hash(self.login_enterPass_lineedit.text())
         self.user_pass_hash = self.login_enterPass_lineedit.text()
+        print('password you just entered is is: ', self.user_pass_hash)
         self.dbms.user_data["user_name"] = self.user_name
         if self.dbms.get_user_data():
             print("user pass hash from teh screen: ", self.user_pass_hash)
+
+            # salt the password and hash it
+            salted_pass = self.user_pass_hash + self.dbms.user_data.get("user_salt")
+            self.user_pass_hash = find_hash(salted_pass)
+
             print("user pass hash from the database: ", self.dbms.user_data.get("user_pass_hash"))
             if self.user_pass_hash == self.dbms.user_data.get("user_pass_hash"):
                 self.login_remark_lbl.setText("Login Successful!")

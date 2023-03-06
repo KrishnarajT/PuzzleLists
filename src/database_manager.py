@@ -2,7 +2,10 @@
 # import mysql.connector
 import sys
 import mariadb
-
+import os
+from security import find_hash
+import string
+import random
 
 class database_manager:
     """class to manage all database related tasks."""
@@ -24,12 +27,17 @@ class database_manager:
             "user_email": None,
             "user_pass_hash": None,
             "user_score": 0,
+            "user_salt": None,
             "user_games": ["snake", "space wars"]
         }
         self.top_scores = None
         self.cursor = None
         self.games_owned_by_user = ["snake", "tetris"]
 
+    def generate_random_string(self, length):
+        ran = ''.join(random.choices(string.ascii_uppercase + string.digits, k = length))    
+        return str(ran)
+    
     def connect_and_create_tables(self):
         """forms connection with sql, and returns True.
             or else returns False
@@ -51,7 +59,7 @@ class database_manager:
         # get cursor
         self.cursor = self.connection.cursor()
         self.cursor.execute(
-            "Create table if not exists UserLogin(User_Name varchar(100), Password varchar(300), Email_ID varchar(50), Credits int, User_Games varchar(200), Primary key (User_Name))"
+            "Create table if not exists UserLogin(User_Name varchar(100), Password varchar(300), Salt varchar(100), Email_ID varchar(50), Credits int, User_Games varchar(200), Primary key (User_Name))"
         )
         self.cursor.execute(
             "Create table if not exists GameScores(User_Name varchar(100), Snake integer, `2048` integer, Tetris integer, Space_wars integer, Icy integer, Foreign key (User_Name) References UserLogin(User_Name))"
@@ -74,9 +82,10 @@ class database_manager:
             # assign the data to the dictionary.
             self.user_data['user_name'] = user_data_from_maria[0]
             self.user_data['user_pass_hash'] = user_data_from_maria[1]
-            self.user_data['user_email'] = user_data_from_maria[2]
-            self.user_data['user_score'] = user_data_from_maria[3]
-            self.user_data['user_games'] = user_data_from_maria[4].strip('()\'').split(',')
+            self.user_data['user_salt'] = user_data_from_maria[2]
+            self.user_data['user_email'] = user_data_from_maria[3]
+            self.user_data['user_score'] = user_data_from_maria[4]
+            self.user_data['user_games'] = user_data_from_maria[5].strip('()\'').split(',')
             self.user_data['user_games'] = [x.strip().strip('\'') for x in self.user_data['user_games']]
             print(self.user_data)
             return True
@@ -87,9 +96,15 @@ class database_manager:
             Boolean : True if the new user was added successfully, False otherwise.
         """
 
+        # salt the password
+        self.user_data['user_salt'] = self.generate_random_string(10)
+        print(self.user_data['user_salt'])
+        self.user_data['user_pass_hash'] = self.user_data['user_pass_hash'] + self.user_data['user_salt']
+        self.user_data['user_pass_hash'] = find_hash(self.user_data['user_pass_hash'])
+
         try:
             # Updating the User Login Table
-            user_login_query = f"Insert into UserLogin values(\"{self.user_data.get('user_name')}\", \"{self.user_data.get('user_pass_hash')}\", \"{self.user_data.get('user_email')}\", {self.user_data.get('user_score')} ,\"{tuple(self.user_data.get('user_games'))}\")"
+            user_login_query = f"Insert into UserLogin values(\"{self.user_data.get('user_name')}\", \"{self.user_data.get('user_pass_hash')}\", \"{self.user_data.get('user_salt')}\", \"{self.user_data.get('user_email')}\", {self.user_data.get('user_score')} ,\"{tuple(self.user_data.get('user_games'))}\")"
             self.cursor.execute(user_login_query)
 
             # Updating the GameScores Table
@@ -107,8 +122,15 @@ class database_manager:
         """updates the user data in the database. To be called only when forgot password
         Returns: True if the password was updated successfully, False otherwise. 
         """
+        # salt the password
+        self.user_data['user_salt'] = self.generate_random_string(10)
+        print(self.user_data['user_salt'])
+        self.user_data['user_pass_hash'] = self.user_data['user_pass_hash'] + self.user_data['user_salt']
+        self.user_data['user_pass_hash'] = find_hash(self.user_data['user_pass_hash'])
+
         try:
-            query = f"update UserLogin set Password = \"{self.user_data.get('user_pass_hash')}\" where User_Name = \"{self.user_data.get('user_name')}\""
+            query = f"update UserLogin set Password = \"{self.user_data.get('user_pass_hash')}\" , Salt = \"{self.user_data.get('user_salt')}\" where User_Name = \"{self.user_data.get('user_name')}\""
+            print(query)
             self.cursor.execute(query)
             self.connection.commit()
             print("User Password Updated Successfully")
@@ -123,7 +145,7 @@ class database_manager:
         """
         try:
             # update the user login table
-            user_login_query = f"update UserLogin set Password = \"{self.user_data.get('user_pass_hash')}\" , Credits = {self.user_data.get('user_score')}, User_Games = \"{tuple(self.user_data.get('user_games'))}\" where User_Name = \"{self.user_data.get('user_name')}\" "
+            user_login_query = f"update UserLogin set Password = \"{self.user_data.get('user_pass_hash')}\" , Salt = \"{self.user_data.get('user_pass_hash')}\", Credits = {self.user_data.get('user_score')}, User_Games = \"{tuple(self.user_data.get('user_games'))}\" where User_Name = \"{self.user_data.get('user_name')}\" "
 
             self.cursor.execute(user_login_query)
 
