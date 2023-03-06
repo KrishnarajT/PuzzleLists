@@ -160,6 +160,7 @@ class snake_game:
             os.path.join(os.getcwd(), "resources/images/snake/grass.png")
         ).convert_alpha()
         self.snake = Snake(self.display)
+        self.score = 0
         self.snake.draw_body()
         self.food = Food(self.display)
         self.food.draw_food()
@@ -205,6 +206,7 @@ class snake_game:
         ):
             self.food.change_position()
             self.snake.increase_body_length()
+            self.score += 1
             self.Increase_speed()
 
         # snake colliding with itself
@@ -228,7 +230,7 @@ class snake_game:
 
     # display score
     def display_score(self):
-        score = self.main_Font.render(f"SCORE:{self.snake.length}", True, (0, 0, 0))
+        score = self.main_Font.render(f"SCORE:{self.snake.length - 1}", True, (0, 0, 0))
         self.display.blit(score, (1000, 10))
 
     # game over screen
@@ -279,6 +281,7 @@ class snake_game:
                         game_pause = False
                         self.speed = 0.21
 
+
                     if not game_pause:
                         if event.key == pg.K_UP or event.key == pg.K_w:
                             self.snake.changed_direction = "UP"
@@ -317,7 +320,9 @@ class snake_game:
 
             tm.sleep(self.speed)
 
+        pg.quit()
+        return self.score
 
 if __name__ == "__main__":
     game = snake_game()
-    game.run()
+    print(game.run())

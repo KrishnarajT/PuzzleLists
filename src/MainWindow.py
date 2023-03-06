@@ -135,20 +135,21 @@ class Ui_Puzzlelists(QMainWindow):
     def update_button_lables(self):
         self.chgame_coins_lbl.setText(str(self.dbms.user_data.get("user_score")))
         games = self.dbms.user_data.get("user_games")
-        if self.current_game == ct.GAMES[0] and self.current_game in games:
-            self.chgame_game1_lbl.setText("PLAY")
+        print(str(ct.GAME_PRICES.get(ct.GAMES[0])))
+        if ct.GAMES[0] in games:
+            self.chgame_game1_btn.setText("PLAY")
         else: 
-            self.chgame_game1_lbl.setText(str(ct.GAME_PRICES.get(self.current_game)))
+            self.chgame_game1_btn.setText(str(ct.GAME_PRICES.get(ct.GAMES[0])))
         
-        if self.current_game == ct.GAMES[1] and self.current_game in games:
-            self.chgame_game2_lbl.setText("PLAY")
+        if ct.GAMES[1] in games:
+            self.chgame_game2_btn.setText("PLAY")
         else: 
-            self.chgame_game2_lbl.setText(str(ct.GAME_PRICES.get(self.current_game)))
+            self.chgame_game2_btn.setText(str(ct.GAME_PRICES.get(ct.GAMES[1])))
 
-        if self.current_game == ct.GAMES[2] and self.current_game in games:
-            self.chgame_game3_lbl.setText("PLAY")
+        if ct.GAMES[2] in games:
+            self.chgame_game3_btn.setText("PLAY")
         else: 
-            self.chgame_game3_lbl.setText(str(ct.GAME_PRICES.get(self.current_game)))
+            self.chgame_game3_btn.setText(str(ct.GAME_PRICES.get(ct.GAMES[2])))
 
     def change_screen(self, screen_number):
         """changes the stacked widget screen.
@@ -175,6 +176,7 @@ class Ui_Puzzlelists(QMainWindow):
         elif screen_number == 3:
             # update the coins so we get the latest value before purchase.
             self.update_button_lables()
+            self.chgame_name_lbl.setText(self.dbms.user_data.get("user_name"))
             self.chgame_coins_lbl.setText(str(self.dbms.user_data.get("user_score")))
             self.stackedWidget.setCurrentIndex(3)
         elif screen_number == 4:
@@ -237,6 +239,36 @@ class Ui_Puzzlelists(QMainWindow):
             if self.user_name == "" or self.user_pass_hash == "":
                 self.fpass_remark_lbl.setText("Please fill all the fields!")
                 return
+
+            if len(self.user_pass_hash) < 8:
+                self.fpass_remark_lbl.setText("Password must be atleast 8 characters long!")
+                return
+            if self.user_pass_hash == self.user_name:
+                self.fpass_remark_lbl.setText("Password cannot be same as username!")
+                return
+            if self.user_pass_hash.isalpha():
+                self.fpass_remark_lbl.setText("Password must contain atleast 1 number!")
+                return
+            if self.user_pass_hash.isnumeric():
+                self.fpass_remark_lbl.setText("Password must contain atleast 1 alphabet!")
+                return
+            if self.user_pass_hash.isalnum():
+                self.fpass_remark_lbl.setText("Password must contain atleast 1 special character!")
+                return
+            if self.user_pass_hash.islower():
+                self.fpass_remark_lbl.setText("Password must contain atleast 1 uppercase letter!")
+                return
+            if self.user_pass_hash.isupper():
+                self.fpass_remark_lbl.setText("Password must contain atleast 1 lowercase letter!")
+                return
+            if self.user_pass_hash == 'password':
+                self.fpass_remark_lbl.setText("Password cannot be 'password'!")
+                return
+            if self.user_pass_hash == '12345678':
+                self.fpass_remark_lbl.setText("Password cannot be '12345678'!")
+                return
+
+
             # you cannot send another otp immediately.
             self.fpass_sendOtp_btn.setEnabled(False)
 
@@ -248,6 +280,35 @@ class Ui_Puzzlelists(QMainWindow):
             if self.user_name == "" or self.user_pass_hash == "":
                 self.signup_remark_lbl.setText("Please fill all the fields!")
                 return        
+            
+            if len(self.user_pass_hash) < 8:
+                self.signup_remark_lbl.setText("Password must be atleast 8 characters long!")
+                return
+            if self.user_pass_hash == self.user_name:
+                self.signup_remark_lbl.setText("Password cannot be same as username!")
+                return
+            if self.user_pass_hash.isalpha():
+                self.signup_remark_lbl.setText("Password must contain atleast 1 number!")
+                return
+            if self.user_pass_hash.isnumeric():
+                self.signup_remark_lbl.setText("Password must contain atleast 1 alphabet!")
+                return
+            if self.user_pass_hash.isalnum():
+                self.signup_remark_lbl.setText("Password must contain atleast 1 special character!")
+                return
+            if self.user_pass_hash.islower():
+                self.signup_remark_lbl.setText("Password must contain atleast 1 uppercase letter!")
+                return
+            if self.user_pass_hash.isupper():
+                self.signup_remark_lbl.setText("Password must contain atleast 1 lowercase letter!")
+                return
+            if self.user_pass_hash == 'password':
+                self.signup_remark_lbl.setText("Password cannot be 'password'!")
+                return
+            if self.user_pass_hash == '12345678':
+                self.signup_remark_lbl.setText("Password cannot be '12345678'!")
+                return
+
             # you cannot send another otp immediately. 
             self.signup_sendOtp_btn.setEnabled(False)
 
@@ -294,31 +355,37 @@ class Ui_Puzzlelists(QMainWindow):
 
         self.change_screen(screen_number=3)
         if self.current_game == ct.GAMES[0]:
-            self.isVisible(False)
+            self.setVisible(False)
             self.dbms.user_game_scores[self.current_game] = gc.start_space_wars()
             self.dbms.user_data['user_score'] += self.dbms.user_game_scores[self.current_game]
-            self.isVisible(True)
+            self.chgame_coins_lbl.setText(str(self.dbms.user_data['user_score']))
+            self.setVisible(True)
         elif self.current_game == ct.GAMES[1]:
-            self.isVisible(False)
+            self.setVisible(False)
             self.dbms.user_game_scores[self.current_game] = gc.start_2048()
             self.dbms.user_data['user_score'] += self.dbms.user_game_scores[self.current_game]
-            self.isVisible(True)
+            self.chgame_coins_lbl.setText(str(self.dbms.user_data['user_score']))
+            self.setVisible(True)
         elif self.current_game == ct.GAMES[2]:
-            self.isVisible(False)
+            self.setVisible(False)
             self.dbms.user_game_scores[self.current_game] = gc.start_icy()
             self.dbms.user_data['user_score'] += self.dbms.user_game_scores[self.current_game]
-            self.isVisible(True)
+            self.chgame_coins_lbl.setText(str(self.dbms.user_data['user_score']))
+            self.setVisible(True)
         elif self.current_game == ct.GAMES[3]:
-            self.isVisible(False)
-            self.dbms.user_game_scores[self.current_game] = gc.start_snake()
+            self.setVisible(False)
+            game = gc.snake_game()
+            self.dbms.user_game_scores[self.current_game] = game.run()
             self.dbms.user_data['user_score'] += self.dbms.user_game_scores[self.current_game]
-            self.isVisible(True)
+            self.chgame_coins_lbl.setText(str(self.dbms.user_data['user_score']))
+            self.setVisible(True)
         elif self.current_game == ct.GAMES[4]:
-            self.isVisible(False)
+            self.setVisible(False)
             tetris = gc.TetrisApp()
             self.dbms.user_game_scores[self.current_game] = tetris.start()
             self.dbms.user_data['user_score'] += self.dbms.user_game_scores[self.current_game]
-            self.isVisible(True)
+            self.chgame_coins_lbl.setText(str(self.dbms.user_data['user_score']))
+            self.setVisible(True)
 
         # now that the game has been played at this point, and the scores are with us, we can update the database, so that if the user now wishes to see the highscores, he can see the updated scores.
         self.dbms.update_database()
@@ -1073,8 +1140,8 @@ class Ui_Puzzlelists(QMainWindow):
         self.fpass_remark_lbl.setText(
             _translate("Puzzlelists", "An OTP Will be sent to your Email Account")
         )
-        self.chgame_game1_lbl.setText(_translate("Puzzlelists", "1. Space Wars"))
         self.chgame_welcome_lbl.setText(_translate("Puzzlelists", "Select your Game!"))
+        self.chgame_game1_lbl.setText(_translate("Puzzlelists", "1. Space Wars"))
         self.chgame_game2_lbl.setText(_translate("Puzzlelists", "2. 2048"))
         self.chgame_game3_lbl.setText(_translate("Puzzlelists", "3. Icy"))
         self.chgame_game4_lbl.setText(_translate("Puzzlelists", "4. Snake"))

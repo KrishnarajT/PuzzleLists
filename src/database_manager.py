@@ -28,7 +28,7 @@ class database_manager:
             "user_pass_hash": None,
             "user_score": 0,
             "user_salt": None,
-            "user_games": ["snake", "space wars"]
+            "user_games": ["snake", "tetris"]
         }
         self.top_scores = None
         self.cursor = None
@@ -145,7 +145,7 @@ class database_manager:
         """
         try:
             # update the user login table
-            user_login_query = f"update UserLogin set Password = \"{self.user_data.get('user_pass_hash')}\" , Salt = \"{self.user_data.get('user_pass_hash')}\", Credits = {self.user_data.get('user_score')}, User_Games = \"{tuple(self.user_data.get('user_games'))}\" where User_Name = \"{self.user_data.get('user_name')}\" "
+            user_login_query = f"update UserLogin set Password = \"{self.user_data.get('user_pass_hash')}\" , Salt = \"{self.user_data.get('user_salt')}\", Credits = {self.user_data.get('user_score')}, User_Games = \"{tuple(self.user_data.get('user_games'))}\" where User_Name = \"{self.user_data.get('user_name')}\" "
 
             self.cursor.execute(user_login_query)
 
