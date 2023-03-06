@@ -2,7 +2,6 @@
 # import mysql.connector
 import sys
 import mariadb
-from security import find_hash
 
 
 class database_manager:
@@ -105,16 +104,18 @@ class database_manager:
             return False
 
     def update_user_password(self):
-        """updates the user data in the database. To be called only when forgot password"""
-        self.user_data['user_pass_hash'] = find_hash("something")
+        """updates the user data in the database. To be called only when forgot password
+        Returns: True if the password was updated successfully, False otherwise. 
+        """
         try:
             query = f"update UserLogin set Password = \"{self.user_data.get('user_pass_hash')}\" where User_Name = \"{self.user_data.get('user_name')}\""
             self.cursor.execute(query)
             self.connection.commit()
             print("User Password Updated Successfully")
+            return True
         except Exception as err:
             print("error occured while updating the user data", err)
-        pass
+            return False
 
     def update_database(self):
         """
