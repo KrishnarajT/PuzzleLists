@@ -21,11 +21,11 @@ class database_manager:
             "space wars": 0,
         }
         self.user_data = {
-            "user_name": "abcde",
-            "user_email": "abde@adfa",
-            "user_pass_hash": find_hash("password"),
+            "user_name": None,
+            "user_email": None,
+            "user_pass_hash": None,
             "user_score": 0,
-            "user_games": ["snake", "tetris"],
+            "user_games": ["snake", "space wars"]
         }
         self.top_scores = None
         self.cursor = None
@@ -39,8 +39,8 @@ class database_manager:
         """
         try:
             self.connection = mariadb.connect(
-                user="parth",
-                password="4123",
+                user="krishnaraj",
+                password="mariamaria",
                 host="127.0.0.1",
                 port=3306,
                 database="Puzzlelists",
@@ -77,11 +77,11 @@ class database_manager:
             self.user_data['user_pass_hash'] = user_data_from_maria[1]
             self.user_data['user_email'] = user_data_from_maria[2]
             self.user_data['user_score'] = user_data_from_maria[3]
-            self.user_data['user_games'] = user_data_from_maria[4].strip('()').split(',')
+            self.user_data['user_games'] = user_data_from_maria[4].strip('()\'').split(',')
+            self.user_data['user_games'] = [x.strip().strip('\'') for x in self.user_data['user_games']]
             print(self.user_data)
             return True
-        
-
+    
     def insert_user(self):
         """Adds a new user to the database.
         Returns:
@@ -89,8 +89,14 @@ class database_manager:
         """
 
         try:
-            query = f"Insert into UserLogin values(\"{self.user_data.get('user_name')}\", \"{self.user_data.get('user_pass_hash')}\", \"{self.user_data.get('user_email')}\", {self.user_data.get('user_score')} ,\"{tuple(self.user_data.get('user_games'))}\")"
-            self.cursor.execute(query)
+            # Updating the User Login Table
+            user_login_query = f"Insert into UserLogin values(\"{self.user_data.get('user_name')}\", \"{self.user_data.get('user_pass_hash')}\", \"{self.user_data.get('user_email')}\", {self.user_data.get('user_score')} ,\"{tuple(self.user_data.get('user_games'))}\")"
+            self.cursor.execute(user_login_query)
+
+            # Updating the GameScores Table
+            game_score_query = f"Insert into GameScores values(\"{self.user_data.get('user_name')}\", {self.user_game_scores.get('snake')}, {self.user_game_scores.get('2048')}, {self.user_game_scores.get('tetris')}, {self.user_game_scores.get('space wars')}, {self.user_game_scores.get('Icy')})"
+            self.cursor.execute(game_score_query)
+
             self.connection.commit()
             print("User Added Successfully")
             return True
@@ -98,24 +104,54 @@ class database_manager:
             print("User Already Exists in the Table")
             return False
 
-    def update_user(self):
-        """updates the user data in the database."""
+    def update_user_password(self):
+        """updates the user data in the database. To be called only when forgot password"""
+        self.user_data['user_pass_hash'] = find_hash("something")
+        try:
+            query = f"update UserLogin set Password = \"{self.user_data.get('user_pass_hash')}\" where User_Name = \"{self.user_data.get('user_name')}\""
+            self.cursor.execute(query)
+            self.connection.commit()
+            print("User Password Updated Successfully")
+        except Exception as err:
+            print("error occured while updating the user data", err)
         pass
 
     def update_database(self):
         """
         updates the database with the new user data.
         """
+        try:
+            # update the user login table
+            user_login_query = f"update UserLogin set Password = \"{self.user_data.get('user_pass_hash')}\" , Credits = {self.user_data.get('user_score')}, User_Games = \"{tuple(self.user_data.get('user_games'))}\" where User_Name = \"{self.user_data.get('user_name')}\" "
+
+            self.cursor.execute(user_login_query)
+
+            # update the game scores table
+            game_scores_query = f"update GameScores set Snake = {self.user_game_scores.get('snake')}, `2048` = {self.user_game_scores.get('2048')}, Tetris = {self.user_game_scores.get('tetris')}, Space_wars = {self.user_game_scores.get('space wars')}, Icy = {self.user_game_scores.get('Icy')} where User_Name = \"{self.user_data.get('user_name')}\""
+
+            self.cursor.execute(game_scores_query)
+
+            self.connection.commit()
+            print("User Data Updated Successfully")
+        except Exception as err:
+            print("error occured while updating the user data", err)
+        pass
 
     def get_top_scores(self):
         """
         stores the data of the top 10 scores in the self.top_scores dictionary.
         """
-        pass
+        score_query = "select *, Snake + `2048` + Tetris + Space_wars + Icy as Total from GameScores order by Snake + `2048` + Tetris + Space_wars + Icy desc limit 10"
+        self.cursor.execute(score_query)
+        self.top_scores = self.cursor.fetchall()
 
 
 if __name__ == "__main__":
-    db = database_manager()
-    db.connect_and_create_tables()
-    db.insert_user()
-    db.get_user_data()
+    # db = database_manager()
+    # db.connect_and_create_tables()
+    # db.insert_user()
+    # db.get_user_data()
+    # db.update_user_password()
+    # db.update_database()
+    # db.get_top_scores()
+    pass
