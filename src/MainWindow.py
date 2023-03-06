@@ -25,7 +25,7 @@ import game_caller as gc
 
 
 class Worker(QObject):
-    finished_sending_mail = pyqtSignal()
+    finished_sending_mail = pyqtSignal(bool)
     #     progress = pyqtSignal(int)
 
     #     def run(self, requiredGraphs, graphWordsList, graphDestPath, filePath, progressBar, progressLabel, mainTabs, labels, messaging_app):
@@ -40,8 +40,11 @@ class Worker(QObject):
     #         progressBar.setValue(100)
     #         mainTabs.setCurrentIndex(3)
     #         self.finished.emit()
-    pass
-
+    def send_mail(self, email, otp):
+        if send_mail(email, otp):
+            self.finished_sending_mail.emit(True)
+        else: 
+            self.finished_sending_mail.emit(False)
 
 class Ui_Puzzlelists(QMainWindow):
     def __init__(self):
@@ -63,6 +66,9 @@ class Ui_Puzzlelists(QMainWindow):
         self.makeFonts()
         self.setupUi()
         self.center()
+
+    def make_threads(self):
+        
 
     def center(self):
         qr = self.frameGeometry()
@@ -180,14 +186,15 @@ class Ui_Puzzlelists(QMainWindow):
 
         self.generated_otp = random.randint(100000, 999999)
         
-        if send_mail(self.user_email, self.generated_otp):
-            self.fpass_remark_lbl.setText("OTP sent to your email!")
-            self.signup_remark_lbl.setText("OTP sent to your email!")
-            self.signup_verifyOtp_btn.setEnabled(True)
-            self.fpass_verifyOtp_btn.setEnabled(True)
-        else:
-            self.fpass_remark_lbl.setText("Incorrect Email!")
-            self.signup_remark_lbl.setText("Incorrect Email!")
+        # if send_mail(self.user_email, self.generated_otp):
+        #     self.fpass_remark_lbl.setText("OTP sent to your email!")
+        #     self.signup_remark_lbl.setText("OTP sent to your email!")
+        #     self.signup_verifyOtp_btn.setEnabled(True)
+        #     self.fpass_verifyOtp_btn.setEnabled(True)
+        # else:
+        #     self.fpass_remark_lbl.setText("Incorrect Email!")
+        #     self.signup_remark_lbl.setText("Incorrect Email!")
+
 
     # this function will have to be multithreaded.
     def verify_login(self):
