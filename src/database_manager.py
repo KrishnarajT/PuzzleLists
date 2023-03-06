@@ -7,6 +7,7 @@
     class database_manager:
         """class to manage all database related tasks."""
 
+<<<<<<< HEAD
         def __init__(self):
             # initialize some stuff
             # here this thing is not instantly called coz we wont be multithreading the creation of the object,
@@ -34,6 +35,29 @@
             self.total_score = 0
             for game in self.user_game_scores:
                 self.total_score += self.user_game_scores[game]
+=======
+    def __init__(self):
+        # initialize some stuff
+        # here this thing is not instantly called coz we wont be multithreading the creation of the object,
+        # only rather its methods.
+        # self.connection_obj = None
+        self.user_game_scores = {
+            "2048": 0,
+            "Icy": 0,
+            "snake": 0,
+            "tetris": 0,
+            "space wars": 0,
+        }
+        self.user_data = {
+            "user_name": None,
+            "user_email": None,
+            "user_pass_hash": None,
+            "user_score": 0,
+            "user_games": [],
+        }
+        self.top_scores = None
+        self.games_owned_by_user = ["snake", "tetris"]
+>>>>>>> 697ccfa2628d8e7f4d79735d4eb5696251846dbc
 
         def connect(self):
             """forms connection with sql, and returns True.
@@ -58,6 +82,29 @@
             self.cur.execute("Create table if not exists UserLogin(User_ID integer, User_Name varchar(50), Password varchar(50), Email_ID varchar(50) , Primary key (User_ID))")
             self.cur.execute("Create table if not exists GameScores(User_ID integer, Snake integer, 2048 integer, Tetris integer, Space_wars integer, Icy integer, Foreign key (User_ID) References UserLogin(User_ID))")
 
+<<<<<<< HEAD
+=======
+    def get_user_data(self, user_name):
+        """
+        If the user is present, it returns True and the data is stored in the self.user_data dictionary.
+        Else it returns False.
+        """
+        check_user = f"SELECT User_Name from UserLogin where User_Name= {user_name}"
+        if not check_user:
+            print("user Does not exist")
+            return False
+        else:
+            # assign the data to the dictionary.
+            self.user_data["user_name"] = user_name
+            self.user_data["user_pass_hash"] = self.cur.execute(
+                f"select Password from UserLogin where User_Name={user_name}"
+            )
+            self.user_data["user_email"] = self.cur.execute(
+                f"select Email_ID from UserLogin where User_Name={user_name}"
+            )
+            return True
+        # connect to mariadb somehow.
+>>>>>>> 697ccfa2628d8e7f4d79735d4eb5696251846dbc
 
 
         def get_user_data(self, user_name):
@@ -98,6 +145,7 @@
                 print("user registered")
             
 
+<<<<<<< HEAD
 
         def update_scores(self, user_name, score, game):
             """
@@ -110,3 +158,16 @@
             stores the data of the top 10 scores in the self.top_scores dictionary. 
             """
             pass
+=======
+    def update_database(self):
+        """
+        updates the entire database with whatever information that we have at the moment.
+        """
+        pass
+
+    def get_top_scores(self):
+        """
+        stores the data of the top 10 scores in the self.top_scores dictionary.
+        """
+        pass
+>>>>>>> 697ccfa2628d8e7f4d79735d4eb5696251846dbc
