@@ -121,7 +121,7 @@ class database_manager:
             self.cursor.execute(user_login_query)
 
             # Updating the GameScores Table
-            game_score_query = f"Insert into GameScores values(\"{self.user_data.get('user_name')}\", {self.user_game_scores.get('snake')}, {self.user_game_scores.get('2048')}, {self.user_game_scores.get('tetris')}, {self.user_game_scores.get('space wars')}, {self.user_game_scores.get('Icy')})"
+            game_score_query = f"Insert into GameScores values(\"{self.user_data.get('user_name')}\", {self.user_game_scores.get('snake')}, {self.user_game_scores.get('2048')}, {self.user_game_scores.get('tetris')}, {self.user_game_scores.get('space wars')}, {self.user_game_scores.get('icy')})"
             self.cursor.execute(game_score_query)
 
             self.connection.commit()
