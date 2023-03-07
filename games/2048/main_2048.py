@@ -14,6 +14,8 @@ import os
 from pathlib import Path
 
 PUZZLE_LIST_DIR = str(Path(__file__).parent.parent.parent)
+pygame.font.init()
+pygame.mixer.init()
 BGM = None
 color = {
     "Red": (255, 0, 0),
@@ -115,8 +117,6 @@ def count_Characters_In_File(File_Name):
     return count
 
 
-pygame.font.init()
-pygame.mixer.init()
 
 # INTITIALIZING THE WIDTH AND THE HEIGHT OF THE WINDOW.
 # THIS GAME WILL BE MADE WITH RESPECT TO THE HEGHT AND THE WIDTH OF THE MONITOR, AND WILL BE HALF OF THAT./
@@ -721,6 +721,8 @@ def lostGame():
 # DEFINING THE START FUNCTION
 def start_2048():
     global score, high_score, fin, WIN, CLICK_SOUND, BGM
+
+
 
     # INITIALIZING THE WINDOW
     WIN = pygame.display.set_mode((WIDTH, HEIGHT), pygame.RESIZABLE)
