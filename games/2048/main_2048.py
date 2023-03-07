@@ -424,6 +424,7 @@ def drawStuff():
     WIN.blit(score_Label, (floor(WIDTH / 1.47), floor(HEIGHT / 3)))
     WIN.blit(high_Score_str_Label, (floor(WIDTH / 1.6), floor(HEIGHT / 1.8)))
     WIN.blit(high_Score_Label, (floor(WIDTH / 1.47), floor(HEIGHT / 1.5)))
+    pygame.display.update()
 
 
 """ FUNCTIONS TO CHECK IF THE TILES ARE MOVABLE IN THAT SPECIFIC DIRECTION """

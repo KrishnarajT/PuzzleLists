@@ -426,7 +426,10 @@ class Ui_Puzzlelists(QMainWindow):
         elif self.current_game == ct.GAMES[2]:
             pg.mixer.music.stop()
             self.setVisible(False)
-            self.dbms.user_game_scores[self.current_game] += gc.start_icy()
+            score = gc.start_icy()
+            print(score)
+            self.dbms.user_game_scores[self.current_game] += score
+            print(self.dbms.user_game_scores[self.current_game])
             self.dbms.user_data["user_score"] += self.dbms.user_game_scores[
                 self.current_game
             ]

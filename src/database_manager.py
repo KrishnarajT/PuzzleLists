@@ -163,7 +163,7 @@ class database_manager:
             self.cursor.execute(user_login_query)
 
             # update the game scores table
-            game_scores_query = f"update GameScores set Snake = {self.user_game_scores.get('snake')}, `2048` = {self.user_game_scores.get('2048')}, Tetris = {self.user_game_scores.get('tetris')}, Space_wars = {self.user_game_scores.get('space wars')}, Icy = {self.user_game_scores.get('Icy')} where User_Name = \"{self.user_data.get('user_name')}\""
+            game_scores_query = f"update GameScores set Snake = {self.user_game_scores.get('snake')}, `2048` = {self.user_game_scores.get('2048')}, Tetris = {self.user_game_scores.get('tetris')}, Space_wars = {self.user_game_scores.get('space wars')}, Icy = {self.user_game_scores.get('icy')} where User_Name = \"{self.user_data.get('user_name')}\""
 
             self.cursor.execute(game_scores_query)
 
