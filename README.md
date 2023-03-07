@@ -13,7 +13,17 @@ The Interface Design is Made in PyQT and the Games are made in Pygame.
 Enjoy!
 
 # Screenshots
-// Gotta add screenshots here
+
+## Welcome Screen
+![](https://github.com/KrishnarajT/PuzzleLists/blob/main/documentation/screenshots/welcome_screen.png)
+## Sign Up
+![](https://github.com/KrishnarajT/PuzzleLists/blob/main/documentation/screenshots/new_user.png)
+## Password Reset
+![](https://github.com/KrishnarajT/PuzzleLists/blob/main/documentation/screenshots/forgot_password.png)
+## Highscores
+![](https://github.com/KrishnarajT/PuzzleLists/blob/main/documentation/screenshots/highscores.png)
+## Choosing Games
+![](https://github.com/KrishnarajT/PuzzleLists/blob/main/documentation/screenshots/choose_game.png)
 
 # Pre-Requisites for Compilation and Testing
 
@@ -29,6 +39,7 @@ Enjoy!
    1. [Icy](https://github.com/KrishnarajT/Icy)
    2. [2048](https://github.com/KrishnarajT/2048)
    3. [Space Wars](https://github.com/KrishnarajT/Space-Wars-Ship-thing)
+5. [chosic.com](https://www.chosic.com/) and [Bensound](https://www.bensound.com/) for their Free Music!
 
 Credits to Teachers, Parents and Lots of Friends for their constant help and support. 
 
