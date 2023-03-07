@@ -85,6 +85,11 @@ class TetrisApp:
                     self.tetris.speed_up = False
 
     def run(self):
+        pg.mixer.init()    
+
+        # BGM AND CLICK SOUNC EFFECT
+        BGM = pg.mixer.music.load(os.path.join(PUZZLE_LIST_DIR, "resources/audio", "RetroFuture-Clean.mp3"))
+        pg.mixer.music.play(-1)
         while self.running:
             self.check_events()
             self.update()

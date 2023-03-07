@@ -739,6 +739,7 @@ def start_icy():
     # BGM AND CLICK SOUNC EFFECT
     BGM = pygame.mixer.music.load(os.path.join(PUZZLE_LIST_DIR, "resources/audio", "BGM.mp3"))
     pygame.mixer.music.play(-1)
+
     CLICK_SOUND = pygame.mixer.Sound(
         os.path.join(PUZZLE_LIST_DIR, "resources/audio", "SELECT1.ogg")
     )

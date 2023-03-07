@@ -4,6 +4,9 @@ import random as rd
 import os
 import time as tm
 
+# Music
+BGM = None
+
 #  variables for snake eyes
 snake_eyes = pg.Color("#000000")
 
@@ -271,8 +274,15 @@ class snake_game:
             self.speed -= 0.007
 
     def run(self):
+        global BGM
         game_running = True
         game_pause = False
+
+        pg.mixer.init()    
+
+        # BGM AND CLICK SOUNC EFFECT
+        BGM = pg.mixer.music.load(os.path.join(PUZZLE_LIST_DIR, "resources/audio", "funkyelement.mp3"))
+        pg.mixer.music.play(-1)
 
         while game_running:
             for event in pg.event.get():

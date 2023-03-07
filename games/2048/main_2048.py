@@ -12,8 +12,9 @@ from math import floor
 import os
 
 from pathlib import Path
-PUZZLE_LIST_DIR = str(Path(__file__).parent.parent.parent)
 
+PUZZLE_LIST_DIR = str(Path(__file__).parent.parent.parent)
+BGM = None
 color = {
     "Red": (255, 0, 0),
     "Green": (0, 255, 0),
@@ -194,23 +195,33 @@ IMAGE_64 = pygame.transform.scale(
     (TILE_SIDE, TILE_SIDE),
 )
 IMAGE_128 = pygame.transform.scale(
-    pygame.image.load(os.path.join(PUZZLE_LIST_DIR, "resources/images/2048", "128.png")),
+    pygame.image.load(
+        os.path.join(PUZZLE_LIST_DIR, "resources/images/2048", "128.png")
+    ),
     (TILE_SIDE, TILE_SIDE),
 )
 IMAGE_256 = pygame.transform.scale(
-    pygame.image.load(os.path.join(PUZZLE_LIST_DIR, "resources/images/2048", "256.png")),
+    pygame.image.load(
+        os.path.join(PUZZLE_LIST_DIR, "resources/images/2048", "256.png")
+    ),
     (TILE_SIDE, TILE_SIDE),
 )
 IMAGE_512 = pygame.transform.scale(
-    pygame.image.load(os.path.join(PUZZLE_LIST_DIR, "resources/images/2048", "512.png")),
+    pygame.image.load(
+        os.path.join(PUZZLE_LIST_DIR, "resources/images/2048", "512.png")
+    ),
     (TILE_SIDE, TILE_SIDE),
 )
 IMAGE_1024 = pygame.transform.scale(
-    pygame.image.load(os.path.join(PUZZLE_LIST_DIR, "resources/images/2048", "1024.png")),
+    pygame.image.load(
+        os.path.join(PUZZLE_LIST_DIR, "resources/images/2048", "1024.png")
+    ),
     (TILE_SIDE, TILE_SIDE),
 )
 IMAGE_2048 = pygame.transform.scale(
-    pygame.image.load(os.path.join(PUZZLE_LIST_DIR, "resources/images/2048", "2048.png")),
+    pygame.image.load(
+        os.path.join(PUZZLE_LIST_DIR, "resources/images/2048", "2048.png")
+    ),
     (TILE_SIDE, TILE_SIDE),
 )
 
@@ -647,7 +658,9 @@ def playGame():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 fout = open(
-                    os.path.join(PUZZLE_LIST_DIR, "resources/images/2048", "highscore.txt"),
+                    os.path.join(
+                        PUZZLE_LIST_DIR, "resources/images/2048", "highscore.txt"
+                    ),
                     "w",
                 )
                 fout.write(high_score.__str__())
@@ -657,7 +670,8 @@ def playGame():
             pygame.time.wait(3000)
             result = lostGame()
             fout = open(
-                os.path.join(PUZZLE_LIST_DIR, "resources/images/2048", "highscore.txt"), "w"
+                os.path.join(PUZZLE_LIST_DIR, "resources/images/2048", "highscore.txt"),
+                "w",
             )
             fout.write(high_score.__str__())
             fout.close()
@@ -674,7 +688,9 @@ def lostGame():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 fout = open(
-                    os.path.join(PUZZLE_LIST_DIR, "resources/images/2048", "highscore.txt"),
+                    os.path.join(
+                        PUZZLE_LIST_DIR, "resources/images/2048", "highscore.txt"
+                    ),
                     "w",
                 )
                 fout.write(high_score.__str__())
@@ -704,13 +720,12 @@ def lostGame():
 
 # DEFINING THE START FUNCTION
 def start_2048():
-    global score, high_score, fin, WIN
-    
+    global score, high_score, fin, WIN, CLICK_SOUND, BGM
+
     # INITIALIZING THE WINDOW
     WIN = pygame.display.set_mode((WIDTH, HEIGHT), pygame.RESIZABLE)
     pygame.display.set_caption("2048")
-    
-    
+
     # INITIALIZING THE BG MUSIC
 
     pygame.mixer.music.load(os.path.join(PUZZLE_LIST_DIR, "resources/audio", "BGM.ogg"))
@@ -719,7 +734,6 @@ def start_2048():
         os.path.join(PUZZLE_LIST_DIR, "resources/audio", "SELECT1.ogg")
     )
 
-    
     start_Loop = True
     while start_Loop:
         WIN.blit(BG_IMAGE, ORIGIN)
@@ -761,6 +775,7 @@ def start_2048():
     fout.write(high_score.__str__())
     fout.close()
     pygame.quit()
-    return floor(score/50)
+    return floor(score / 50)
+
 
 # print(start_2048())

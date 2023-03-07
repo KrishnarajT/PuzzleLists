@@ -30,12 +30,18 @@ from send_mail import send_mail
 from security import find_hash
 from database_manager import database_manager
 import game_caller as gc
-
+import pygame as pg
 
 class Ui_Puzzlelists(QMainWindow):
 
     def __init__(self):
         super().__init__()
+
+        pg.mixer.init()
+        # BGM AND CLICK SOUNC EFFECT
+        self.BGM = pg.mixer.music.load(os.path.join(ct.ROOT_DIR, "resources/audio", "RetroFuture-Clean.mp3"))
+
+        pg.mixer.music.play(-1)
 
         # Basic window setup
         self.setWindowTitle("Puzzlelists")
@@ -94,7 +100,6 @@ class Ui_Puzzlelists(QMainWindow):
         self.table.horizontalHeader().setFont(QFont(self.games_played_Font, 15))
 
         self.table.setFont(QFont(self.games_played_Font, 15))
-
 
     def center(self):
         qr = self.frameGeometry()
@@ -398,6 +403,7 @@ class Ui_Puzzlelists(QMainWindow):
         print(self.current_game)
         self.change_screen(screen_number=3)
         if self.current_game == ct.GAMES[0]:
+            pg.mixer.pause()
             self.setVisible(False)
             self.dbms.user_game_scores[self.current_game] += gc.start_space_wars()
             self.dbms.user_data["user_score"] += self.dbms.user_game_scores[
@@ -405,7 +411,9 @@ class Ui_Puzzlelists(QMainWindow):
             ]
             self.chgame_coins_lbl.setText(str(self.dbms.user_data["user_score"]))
             self.setVisible(True)
+            pg.mixer.unpause()
         elif self.current_game == ct.GAMES[1]:
+            pg.mixer.pause()
             self.setVisible(False)
             self.dbms.user_game_scores[self.current_game] += gc.start_2048()
             self.dbms.user_data["user_score"] += self.dbms.user_game_scores[
@@ -413,7 +421,9 @@ class Ui_Puzzlelists(QMainWindow):
             ]
             self.chgame_coins_lbl.setText(str(self.dbms.user_data["user_score"]))
             self.setVisible(True)
+            pg.mixer.unpause()
         elif self.current_game == ct.GAMES[2]:
+            pg.mixer.pause()
             self.setVisible(False)
             self.dbms.user_game_scores[self.current_game] += gc.start_icy()
             self.dbms.user_data["user_score"] += self.dbms.user_game_scores[
@@ -421,7 +431,9 @@ class Ui_Puzzlelists(QMainWindow):
             ]
             self.chgame_coins_lbl.setText(str(self.dbms.user_data["user_score"]))
             self.setVisible(True)
+            pg.mixer.unpause()
         elif self.current_game == ct.GAMES[3]:
+            pg.mixer.pause()
             self.setVisible(False)
             game = gc.snake_game()
             self.dbms.user_game_scores[self.current_game] += game.run()
@@ -430,7 +442,9 @@ class Ui_Puzzlelists(QMainWindow):
             ]
             self.chgame_coins_lbl.setText(str(self.dbms.user_data["user_score"]))
             self.setVisible(True)
+            pg.mixer.unpause()
         elif self.current_game == ct.GAMES[4]:
+            pg.mixer.pause()
             self.setVisible(False)
             tetris = gc.TetrisApp()
             self.dbms.user_game_scores[self.current_game] += tetris.run()
@@ -439,6 +453,7 @@ class Ui_Puzzlelists(QMainWindow):
             ]
             self.chgame_coins_lbl.setText(str(self.dbms.user_data["user_score"]))
             self.setVisible(True)
+            pg.mixer.unpause()
 
         # now that the game has been played at this point, and the scores are with us, we can update the database, so that if the user now wishes to see the highscores, he can see the updated scores.
         self.dbms.update_database()
