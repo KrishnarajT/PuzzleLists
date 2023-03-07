@@ -11,6 +11,8 @@ import random
 from math import floor
 import os
 
+from pathlib import Path
+PUZZLE_LIST_DIR = str(Path(__file__).parent.parent.parent)
 
 color = {
     "Red": (255, 0, 0),
@@ -119,7 +121,7 @@ pygame.mixer.init()
 # THIS GAME WILL BE MADE WITH RESPECT TO THE HEGHT AND THE WIDTH OF THE MONITOR, AND WILL BE HALF OF THAT./
 
 WIDTH, HEIGHT = 1280, 720
-WIDTH, HEIGHT = floor(WIDTH * 0.75), floor(HEIGHT * 0.75)
+# WIDTH, HEIGHT = floor(WIDTH * 0.75), floor(HEIGHT * 0.75)
 
 # INITIALIZING THE DIMENSIONS OF THE BG_BOX OF THE 2048 THING, AND THE SIDE OF THE TILES
 
@@ -136,79 +138,79 @@ WIN = None
 # INITIALIZING THE FONTS.
 
 GAME_FONT = pygame.font.Font(
-    os.path.join(os.getcwd(), "resources/fonts/", "kel.ttf"), 70
+    os.path.join(PUZZLE_LIST_DIR, "resources/fonts/", "kel.ttf"), 70
 )
 
 # INTITIALIZING THE IMAGES.
 
 BG_IMAGE = pygame.transform.scale(
     pygame.image.load(
-        os.path.join(os.getcwd(), "resources/images/2048", "BG_IMAGE.png")
+        os.path.join(PUZZLE_LIST_DIR, "resources/images/2048", "BG_IMAGE.png")
     ),
     (WIDTH, HEIGHT),
 )
 LOST_IMAGE = pygame.transform.scale(
     pygame.image.load(
-        os.path.join(os.getcwd(), "resources/images/2048", "LOST_IMAGE.png")
+        os.path.join(PUZZLE_LIST_DIR, "resources/images/2048", "LOST_IMAGE.png")
     ),
     (WIDTH, HEIGHT),
 )
 PLAY_IMAGE = pygame.transform.scale(
     pygame.image.load(
-        os.path.join(os.getcwd(), "resources/images/2048", "PLAY_IMAGE.png")
+        os.path.join(PUZZLE_LIST_DIR, "resources/images/2048", "PLAY_IMAGE.png")
     ),
     (WIDTH, HEIGHT),
 )
 BG_BOX_IMAGE = pygame.transform.scale(
     pygame.image.load(
-        os.path.join(os.getcwd(), "resources/images/2048", "BG_BOX_IMAGE.png")
+        os.path.join(PUZZLE_LIST_DIR, "resources/images/2048", "BG_BOX_IMAGE.png")
     ),
     (BG_BOX_SIZE, BG_BOX_SIZE),
 )
 
 # INITIALIZING THE VALUED TILES.
 IMAGE_2 = pygame.transform.scale(
-    pygame.image.load(os.path.join(os.getcwd(), "resources/images/2048", "2.png")),
+    pygame.image.load(os.path.join(PUZZLE_LIST_DIR, "resources/images/2048", "2.png")),
     (TILE_SIDE, TILE_SIDE),
 )
 IMAGE_4 = pygame.transform.scale(
-    pygame.image.load(os.path.join(os.getcwd(), "resources/images/2048", "4.png")),
+    pygame.image.load(os.path.join(PUZZLE_LIST_DIR, "resources/images/2048", "4.png")),
     (TILE_SIDE, TILE_SIDE),
 )
 IMAGE_8 = pygame.transform.scale(
-    pygame.image.load(os.path.join(os.getcwd(), "resources/images/2048", "8.png")),
+    pygame.image.load(os.path.join(PUZZLE_LIST_DIR, "resources/images/2048", "8.png")),
     (TILE_SIDE, TILE_SIDE),
 )
 IMAGE_16 = pygame.transform.scale(
-    pygame.image.load(os.path.join(os.getcwd(), "resources/images/2048", "16.png")),
+    pygame.image.load(os.path.join(PUZZLE_LIST_DIR, "resources/images/2048", "16.png")),
     (TILE_SIDE, TILE_SIDE),
 )
 IMAGE_32 = pygame.transform.scale(
-    pygame.image.load(os.path.join(os.getcwd(), "resources/images/2048", "32.png")),
+    pygame.image.load(os.path.join(PUZZLE_LIST_DIR, "resources/images/2048", "32.png")),
     (TILE_SIDE, TILE_SIDE),
 )
 IMAGE_64 = pygame.transform.scale(
-    pygame.image.load(os.path.join(os.getcwd(), "resources/images/2048", "64.png")),
+    pygame.image.load(os.path.join(PUZZLE_LIST_DIR, "resources/images/2048", "64.png")),
     (TILE_SIDE, TILE_SIDE),
 )
 IMAGE_128 = pygame.transform.scale(
-    pygame.image.load(os.path.join(os.getcwd(), "resources/images/2048", "128.png")),
+    pygame.image.load(os.path.join(PUZZLE_LIST_DIR, "resources/images/2048", "128.png")),
     (TILE_SIDE, TILE_SIDE),
 )
 IMAGE_256 = pygame.transform.scale(
-    pygame.image.load(os.path.join(os.getcwd(), "resources/images/2048", "256.png")),
+    pygame.image.load(os.path.join(PUZZLE_LIST_DIR, "resources/images/2048", "256.png")),
     (TILE_SIDE, TILE_SIDE),
 )
 IMAGE_512 = pygame.transform.scale(
-    pygame.image.load(os.path.join(os.getcwd(), "resources/images/2048", "512.png")),
+    pygame.image.load(os.path.join(PUZZLE_LIST_DIR, "resources/images/2048", "512.png")),
     (TILE_SIDE, TILE_SIDE),
 )
 IMAGE_1024 = pygame.transform.scale(
-    pygame.image.load(os.path.join(os.getcwd(), "resources/images/2048", "1024.png")),
+    pygame.image.load(os.path.join(PUZZLE_LIST_DIR, "resources/images/2048", "1024.png")),
     (TILE_SIDE, TILE_SIDE),
 )
 IMAGE_2048 = pygame.transform.scale(
-    pygame.image.load(os.path.join(os.getcwd(), "resources/images/2048", "2048.png")),
+    pygame.image.load(os.path.join(PUZZLE_LIST_DIR, "resources/images/2048", "2048.png")),
     (TILE_SIDE, TILE_SIDE),
 )
 
@@ -232,7 +234,7 @@ for I in range(4):
 # INITIALIZING THE SCORE
 
 score = 0
-fin = open(os.path.join(os.getcwd(), "resources/images/2048", "highscore.txt"), "r")
+fin = open(os.path.join(PUZZLE_LIST_DIR, "resources/images/2048", "highscore.txt"), "r")
 high_score = fin.read()
 fin.close()
 
@@ -401,7 +403,7 @@ def drawStuff():
     if score > int(high_score):
         high_score = score
     font = pygame.font.Font(
-        os.path.join(os.getcwd(), "resources/fonts", "kel.ttf"), floor(HEIGHT / 9)
+        os.path.join(PUZZLE_LIST_DIR, "resources/fonts", "kel.ttf"), floor(HEIGHT / 9)
     )
     score_str_Label = font.render("Score", True, color.get("White"))
     score_Label = font.render(f"{score}", True, color.get("White"))
@@ -645,7 +647,7 @@ def playGame():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 fout = open(
-                    os.path.join(os.getcwd(), "resources/images/2048", "highscore.txt"),
+                    os.path.join(PUZZLE_LIST_DIR, "resources/images/2048", "highscore.txt"),
                     "w",
                 )
                 fout.write(high_score.__str__())
@@ -655,7 +657,7 @@ def playGame():
             pygame.time.wait(3000)
             result = lostGame()
             fout = open(
-                os.path.join(os.getcwd(), "resources/images/2048", "highscore.txt"), "w"
+                os.path.join(PUZZLE_LIST_DIR, "resources/images/2048", "highscore.txt"), "w"
             )
             fout.write(high_score.__str__())
             fout.close()
@@ -672,7 +674,7 @@ def lostGame():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 fout = open(
-                    os.path.join(os.getcwd(), "resources/images/2048", "highscore.txt"),
+                    os.path.join(PUZZLE_LIST_DIR, "resources/images/2048", "highscore.txt"),
                     "w",
                 )
                 fout.write(high_score.__str__())
@@ -711,10 +713,10 @@ def start_2048():
     
     # INITIALIZING THE BG MUSIC
 
-    pygame.mixer.music.load(os.path.join(os.getcwd(), "resources/audio", "BGM.ogg"))
+    pygame.mixer.music.load(os.path.join(PUZZLE_LIST_DIR, "resources/audio", "BGM.ogg"))
     pygame.mixer.music.play()
     CLICK_SOUND = pygame.mixer.Sound(
-        os.path.join(os.getcwd(), "resources/audio", "SELECT1.ogg")
+        os.path.join(PUZZLE_LIST_DIR, "resources/audio", "SELECT1.ogg")
     )
 
     
@@ -736,7 +738,7 @@ def start_2048():
                     score = 0
                     fin = open(
                         os.path.join(
-                            os.getcwd(), "resources/images/2048", "highscore.txt"
+                            PUZZLE_LIST_DIR, "resources/images/2048", "highscore.txt"
                         ),
                         "r",
                     )
@@ -754,10 +756,11 @@ def start_2048():
         pygame.display.update()
 
     fout = open(
-        os.path.join(os.getcwd(), "resources/images/2048", "highscore.txt"), "w"
+        os.path.join(PUZZLE_LIST_DIR, "resources/images/2048", "highscore.txt"), "w"
     )
     fout.write(high_score.__str__())
     fout.close()
+    pygame.quit()
+    return floor(score/50)
 
-
-# start_2048()
+# print(start_2048())

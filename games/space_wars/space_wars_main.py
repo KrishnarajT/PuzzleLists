@@ -3,13 +3,14 @@ import os
 import random
 from Ky_Game import color
 
-pygame.font.init()
-pygame.mixer.init()
+
+from pathlib import Path
+PUZZLE_LIST_DIR = str(Path(__file__).parent.parent.parent)
+
 # GENERAL CONSTANTS
-WIDTH, HEIGHT = 1280, 720
+WIDTH, HEIGHT = 1920, 1080
 FPS = 90
 ORIGIN = (0, 0)
-
 
 
 WIN = None
@@ -19,7 +20,7 @@ WIN = None
 RED_SPACE_SHIP = pygame.transform.scale(
     pygame.image.load(
         os.path.join(
-            os.getcwd(), "resources/images/space_wars", "pixel_ship_red_small.png"
+            PUZZLE_LIST_DIR, "resources/images/space_wars", "pixel_ship_red_small.png"
         )
     ),
     (140, 100),
@@ -28,7 +29,7 @@ RED_SPACE_SHIP = pygame.transform.scale(
 BLUE_SPACE_SHIP = pygame.transform.scale(
     pygame.image.load(
         os.path.join(
-            os.getcwd(), "resources/images/space_wars", "pixel_ship_blue_small.png"
+            PUZZLE_LIST_DIR, "resources/images/space_wars", "pixel_ship_blue_small.png"
         )
     ),
     (100, 100),
@@ -37,7 +38,7 @@ BLUE_SPACE_SHIP = pygame.transform.scale(
 GREEN_SPACE_SHIP = pygame.transform.scale(
     pygame.image.load(
         os.path.join(
-            os.getcwd(), "resources/images/space_wars", "pixel_ship_green_small.png"
+            PUZZLE_LIST_DIR, "resources/images/space_wars", "pixel_ship_green_small.png"
         )
     ),
     (140, 100),
@@ -45,42 +46,45 @@ GREEN_SPACE_SHIP = pygame.transform.scale(
 
 # PLAYER'S SHIP
 YELLOW_SPACE_SHIP = pygame.image.load(
-    os.path.join(os.getcwd(), "resources/images/space_wars", "pixel_ship_yellow.png")
+    os.path.join(PUZZLE_LIST_DIR, "resources/images/space_wars", "pixel_ship_yellow.png")
 )
 
 # LASERS
 RED_LASER = pygame.image.load(
-    os.path.join(os.getcwd(), "resources/images/space_wars", "pixel_laser_red.png")
+    os.path.join(PUZZLE_LIST_DIR, "resources/images/space_wars", "pixel_laser_red.png")
 )
 
 BLUE_LASER = pygame.image.load(
-    os.path.join(os.getcwd(), "resources/images/space_wars", "pixel_laser_blue.png")
+    os.path.join(PUZZLE_LIST_DIR, "resources/images/space_wars", "pixel_laser_blue.png")
 )
 
 GREEN_LASER = pygame.image.load(
-    os.path.join(os.getcwd(), "resources/images/space_wars", "pixel_laser_green.png")
+    os.path.join(PUZZLE_LIST_DIR, "resources/images/space_wars", "pixel_laser_green.png")
 )
 
 YELLOW_LASER = pygame.image.load(
-    os.path.join(os.getcwd(), "resources/images/space_wars", "bullet.png")
+    os.path.join(PUZZLE_LIST_DIR, "resources/images/space_wars", "bullet.png")
 )
 
 # BACKGROUND IMAGE - SCALED TO FIT THE SCREEN
 BG_IMAGE = pygame.transform.scale(
     pygame.image.load(
-        os.path.join(os.getcwd(), "resources/images/space_wars", "SPACE WARS BGI.png")
+        os.path.join(PUZZLE_LIST_DIR, "resources/images/space_wars", "SPACE WARS BGI.png")
     ),
     (WIDTH, HEIGHT),
 )
 BG_IMAGE_LOST = pygame.transform.scale(
     pygame.image.load(
         os.path.join(
-            os.getcwd(), "resources/images/space_wars", "SPACE WARS BG LOST.png"
+            PUZZLE_LIST_DIR, "resources/images/space_wars", "SPACE WARS BG LOST.png"
         )
     ),
     (WIDTH, HEIGHT),
 )
 
+# BACKGROUND MUSIC
+laser_Sound = None
+explosion_Sound = None
 
 # class for all the laser activity in the game.
 class Laser:
@@ -142,7 +146,7 @@ class GenShip:
 
 class Player(GenShip):
     Fin = open(
-        os.path.join(os.getcwd(), "resources/images/space_wars", "Highscore.txt"), "r"
+        os.path.join(PUZZLE_LIST_DIR, "resources/images/space_wars", "Highscore.txt"), "r"
     )
     StuffInFile = Fin.read()
     HighScore = int(StuffInFile)
@@ -289,10 +293,10 @@ def checkInput(player_Ship_Obj, player_Ship_Vel):
 def drawText(level, life, player_Obj, won_Level=False):
     # FONTS
     main_Font = pygame.font.Font(
-        os.path.join(os.getcwd(), "resources/fonts", "F-Roboto-Thin.ttf"), 50
+        os.path.join(PUZZLE_LIST_DIR, "resources/fonts", "F-Roboto-Thin.ttf"), 50
     )
     level_Won_Font = pygame.font.Font(
-        os.path.join(os.getcwd(), "resources/fonts", "CloisterBlack.ttf"), 250
+        os.path.join(PUZZLE_LIST_DIR, "resources/fonts", "CloisterBlack.ttf"), 250
     )
 
     # LABELS
@@ -345,7 +349,7 @@ def updateStuff(level, life, enemies, player_Obj, lost, won_Level, loop):
         pygame.time.wait(2000)
         WIN.blit(BG_IMAGE_LOST, ORIGIN)
         pygame.display.update()
-        fout = open("assets/Highscore.txt", "w")
+        fout = open(os.path.join(PUZZLE_LIST_DIR, 'resources/images/space_wars/Highscore.txt'), "w")
         fout.write(player_Obj.HighScore.__str__())
         fout.close()
         pygame.time.wait(3000)
@@ -430,7 +434,7 @@ def main():
             if event.type == pygame.QUIT:
                 fout = open(
                     os.path.join(
-                        os.getcwd(), "resources/images/space_wars", "Highscore.txt"
+                        PUZZLE_LIST_DIR, "resources/images/space_wars", "Highscore.txt"
                     ),
                     "w",
                 )
@@ -461,22 +465,28 @@ def main():
                 life -= 1
                 enemies.remove(enemy)
         player_Obj.PlayerMoveLasers_(-laser_Vel, enemies)
+    return player_Obj.CurHighScore
 
 
 def start_space_wars():
+    global laser_Sound, explosion_Sound
+    score = 0
+
+    pygame.font.init()
+    pygame.mixer.init()
     # adding music
-    pygame.mixer.music.load(os.path.join(os.getcwd(), "resources/audio", "bgm.wav"))
+    pygame.mixer.music.load(os.path.join(PUZZLE_LIST_DIR, "resources/audio", "bones.mp3"))
     laser_Sound = pygame.mixer.Sound(
-        os.path.join(os.getcwd(), "resources/audio", "laser.wav")
+        os.path.join(PUZZLE_LIST_DIR, "resources/audio", "laser.wav")
     )
     explosion_Sound = pygame.mixer.Sound(
-        os.path.join(os.getcwd(), "resources/audio", "explosion.wav")
+        os.path.join(PUZZLE_LIST_DIR, "resources/audio", "explosion.wav")
     )
     pygame.mixer.music.play(-1)
     global WIN
     # WINDOW CONSTANTS
-    WIN = pygame.display.set_mode((WIDTH, HEIGHT), pygame.FULLSCREEN | pygame.RESIZABLE)
-    pygame.display.set_caption("Ship Shooter")
+    WIN = pygame.display.set_mode((WIDTH, HEIGHT), pygame.RESIZABLE)
+    pygame.display.set_caption("Space Wars")
 
     run = True
     while run:
@@ -486,14 +496,14 @@ def start_space_wars():
                 run = False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 run = False
-                main()
+                score += main()
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
-                    main()
+                    score += main()
                     run = False
 
         pygame.display.update()
     pygame.quit()
 
+    return score
 
-# start_space_wars()

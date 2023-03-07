@@ -16,6 +16,17 @@ class TetrisApp:
         self.images = self.load_images()
         self.running = True
         self.tetris = Tetris(self)
+        self.score = 0
+        self.bg_image = pg.image.load(
+            os.path.join(PUZZLE_LIST_DIR, "resources/images/tetris/bg.jpg")
+        ).convert_alpha()
+        # self.bg_image = pg.transform.scale(self.bg_image, (WIDTH, HEIGHT))
+        self.main_Font = pg.font.Font(
+            os.path.join(PUZZLE_LIST_DIR, "resources/fonts", "GamePlayed-vYL7.ttf"), 35
+        )
+    def display_score(self):
+        score = self.main_Font.render(f"SCORE: {self.score}", True, (255, 225, 255))
+        self.screen.blit(score, (520, 100))
 
     def load_images(self):
         files = [
@@ -43,7 +54,9 @@ class TetrisApp:
         self.clock.tick(FPS)
 
     def draw(self):
-        self.screen.fill(color=BG_COLOR)
+        # self.screen.fill(color=BG_COLOR)
+        self.screen.blit(self.bg_image, (0, 0))
+        self.display_score()
         self.tetris.draw()
         pg.display.flip()
 
@@ -76,8 +89,9 @@ class TetrisApp:
             self.check_events()
             self.update()
             self.draw()
-
+        pg.quit()
+        return self.score
 
 if __name__ == "__main__":
     app = TetrisApp()
-    app.run()
+    print(app.run())

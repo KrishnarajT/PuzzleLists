@@ -6,12 +6,13 @@ import os
 import smtplib
 from email.message import EmailMessage
 import random
+import constants as ct
 
 EMAIL_ADDRESS = 'puzzlelists@gmail.com'
 EMAIL_PASSWORD  = None
 OTP = random.randint(100000, 999999)
 
-with open(os.path.join(os.getcwd(), 'src/PASSWORD.txt')) as f:
+with open(os.path.join(ct.ROOT_DIR, 'src/PASSWORD.txt')) as f:
     EMAIL_PASSWORD = f.read()
 
 def send_mail( To, OTP, Subject = 'OTP Verfication for your Account on Puzzlelists'):

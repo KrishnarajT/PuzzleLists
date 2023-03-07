@@ -18,6 +18,9 @@ import pygame
 from Ky_Game import *
 import os
 import random
+from pathlib import Path
+
+PUZZLE_LIST_DIR = str(Path(__file__).parent.parent.parent)
 
 WIDTH, HEIGHT = 1280, 720
 
@@ -25,31 +28,31 @@ WIDTH, HEIGHT = 1280, 720
 # THESE ARE BACKGROUND IMAGES FOR EVERY PLAY MODE.
 BG_IMAGE = pygame.transform.scale(
     pygame.image.load(
-        os.path.join(os.getcwd(), "resources/images/icy", "BG_IMAGE.png")
+        os.path.join(PUZZLE_LIST_DIR, "resources/images/icy", "BG_IMAGE.png")
     ),
     (WIDTH, HEIGHT),
 )
 LOST_IMAGE = pygame.transform.scale(
     pygame.image.load(
-        os.path.join(os.getcwd(), "resources/images/icy", "LOST_IMAGE.png")
+        os.path.join(PUZZLE_LIST_DIR, "resources/images/icy", "LOST_IMAGE.png")
     ),
     (WIDTH, HEIGHT),
 )
 PLAY_IMAGE = pygame.transform.scale(
     pygame.image.load(
-        os.path.join(os.getcwd(), "resources/images/icy", "PLAY_IMAGE.png")
+        os.path.join(PUZZLE_LIST_DIR, "resources/images/icy", "PLAY_IMAGE.png")
     ),
     (WIDTH, HEIGHT),
 )
 PLAY_IMAGE_TIME = pygame.transform.scale(
     pygame.image.load(
-        os.path.join(os.getcwd(), "resources/images/icy", "PLAY_IMAGE_TIME.png")
+        os.path.join(PUZZLE_LIST_DIR, "resources/images/icy", "PLAY_IMAGE_TIME.png")
     ),
     (WIDTH, HEIGHT),
 )
 MENU_IMAGE = pygame.transform.scale(
     pygame.image.load(
-        os.path.join(os.getcwd(), "resources/images/icy", "MENU_IMAGE.png")
+        os.path.join(PUZZLE_LIST_DIR, "resources/images/icy", "MENU_IMAGE.png")
     ),
     (WIDTH, HEIGHT),
 )
@@ -93,11 +96,11 @@ time_level = 1
 
 # GET THE HIGHSCORES RESPECTIVELY
 fin = open(
-    os.path.join(os.getcwd(), "resources/images/icy", "click_highscore.txt"), "r"
+    os.path.join(PUZZLE_LIST_DIR, "resources/images/icy", "click_highscore.txt"), "r"
 )
 click_highscore = int(fin.read())
 fin.close()
-fin = open(os.path.join(os.getcwd(), "resources/images/icy", "time_highscore.txt"), "r")
+fin = open(os.path.join(PUZZLE_LIST_DIR, "resources/images/icy", "time_highscore.txt"), "r")
 time_highscore = int(fin.read())
 fin.close()
 
@@ -329,7 +332,7 @@ def CheckFoundWeirdo(x, y, Box_Side):
 
 # DRAWS ALL THE TEXT ON THE SCREEN FOR THE CLICK FUNCTION
 def drawStatsClick(cur_level, highscore):
-    font = pygame.font.Font("assets/KEL.ttf", floor(HEIGHT / 7))
+    font = pygame.font.Font(os.path.join(PUZZLE_LIST_DIR, "resources/fonts/kel.ttf"), floor(HEIGHT / 7))
     level_label = font.render(f"{cur_level}", True, color.get("Blue"))
     score_label = font.render(f"{highscore}", True, color.get("Green"))
 
@@ -354,7 +357,7 @@ def drawStatsClick(cur_level, highscore):
 
 # DRAWS ALL THE TEXT ON THE SCREEN FOR THE TIME FUNCTION
 def drawStatsTime(cur_level, time_passed, highscore):
-    font = pygame.font.Font("assets/KEL.ttf", floor(HEIGHT / 7))
+    font = pygame.font.Font(os.path.join(PUZZLE_LIST_DIR, "resources/fonts/kel.ttf"), floor(HEIGHT / 7))
     level_label = font.render(f"{cur_level}", True, color.get("Blue"))
     score_label = font.render(f"{highscore}", True, color.get("Green"))
 
@@ -550,7 +553,7 @@ def clickLimit():
             TAP -= 1
 
         if TAP >= 5:
-            font = pygame.font.Font("assets/KEL.ttf", floor(HEIGHT / 7))
+            font = pygame.font.Font(os.path.join(PUZZLE_LIST_DIR, "resources/fonts/kel.ttf"), floor(HEIGHT / 7))
             tap_label = font.render(f"{5 - TAP}", True, color.get("Green"))
 
             SUBSURFACE = PLAY_IMAGE.subsurface(
@@ -575,7 +578,7 @@ def clickLimit():
                 lostGame()
             )  # returns true if you wanna continue, else it returns false
 
-            fout = open("assets/click_highscore.txt", "w")
+            fout = open(os.path.join(PUZZLE_LIST_DIR, "resources/images/icy/click_highscore.txt"), "w")
             fout.write(click_highscore.__str__())
             fout.close()
 
@@ -636,7 +639,7 @@ def timeLimit():
             time_level += 1
 
         if time_passed <= 0:
-            font = pygame.font.Font("assets/KEL.ttf", floor(HEIGHT / 7))
+            font = pygame.font.Font(os.path.join(PUZZLE_LIST_DIR, "resources/fonts/kel.ttf"), floor(HEIGHT / 7))
             time_Label = font.render(f"{5 - time_passed}", True, color.get("Green"))
 
             SUBSURFACE = PLAY_IMAGE_TIME.subsurface(
@@ -660,7 +663,7 @@ def timeLimit():
                 lostGame()
             )  # returns ture if you wanna continue else returns false.
 
-            fout = open("assets/time_highscore.txt", "w")
+            fout = open(os.path.join(PUZZLE_LIST_DIR, "resources/images/icy/time_highscore.txt"), "w")
             fout.write(time_highscore.__str__())
             fout.close()
 
@@ -732,14 +735,12 @@ def start_icy():
     
     WIN = pygame.display.set_mode((WIDTH, HEIGHT), pygame.RESIZABLE)
     pygame.display.set_caption("ICY")
-    print(pygame.display.Info())
-    print(pygame.display.get_wm_info())
-    print(WIN.get_size())
+
     # BGM AND CLICK SOUNC EFFECT
-    BGM = pygame.mixer.music.load(os.path.join(os.getcwd(), "resources/audio", "BGM.mp3"))
+    BGM = pygame.mixer.music.load(os.path.join(PUZZLE_LIST_DIR, "resources/audio", "BGM.mp3"))
     pygame.mixer.music.play(-1)
     CLICK_SOUND = pygame.mixer.Sound(
-        os.path.join(os.getcwd(), "resources/audio", "SELECT1.ogg")
+        os.path.join(PUZZLE_LIST_DIR, "resources/audio", "SELECT1.ogg")
     )
 
     loop = True
@@ -783,7 +784,10 @@ def start_icy():
     if run_Menu:
         mainMenu()
     pygame.quit()
+
+    if click_level == 1 and time_level == 1:
+        return 1
     return click_level + time_level
 
 
-# start_icy()
+# print(start_icy())

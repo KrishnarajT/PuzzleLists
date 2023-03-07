@@ -3,10 +3,13 @@ import pygame as pg
 import os
 
 vec = pg.math.Vector2
+from pathlib import Path
+
+PUZZLE_LIST_DIR = str(Path(__file__).parent.parent.parent)
 
 # Constants
-WIDTH = 1280
-HEIGHT = 720
+WIDTH = 750
+HEIGHT = 900
 FPS = 30
 
 # Tetris Constants
@@ -42,4 +45,4 @@ ANIM_TIME_INTERVAL = 500  # milliseconds
 FAST_ANIM_INTERVAL = 50  # milliseconds
 
 # Sprite Constants
-SPRITE_DIR_PATH = os.path.join(os.getcwd(), "resources/images/tetris")
+SPRITE_DIR_PATH = os.path.join(PUZZLE_LIST_DIR, "resources/images/tetris")

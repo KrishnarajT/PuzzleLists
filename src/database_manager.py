@@ -17,7 +17,7 @@ class database_manager:
         # self.connection_obj = None
         self.user_game_scores = {
             "2048": 0,
-            "Icy": 0,
+            "icy": 0,
             "snake": 0,
             "tetris": 0,
             "space wars": 0,
@@ -79,6 +79,19 @@ class database_manager:
             print("user Does not exist")
             return False
         else:
+            # game scores query
+            game_scores_query = f"SELECT * from GameScores where User_Name = \"{self.user_data.get('user_name')}\""
+            self.cursor.execute(game_scores_query)
+            game_scores_from_maria = self.cursor.fetchone()
+
+            # Assign the game scores to the dictionary.
+            self.user_game_scores['snake'] = game_scores_from_maria[1]
+            self.user_game_scores['2048'] = game_scores_from_maria[2]
+            self.user_game_scores['tetris'] = game_scores_from_maria[3]
+            self.user_game_scores['space wars'] = game_scores_from_maria[4]
+            self.user_game_scores['Icy'] = game_scores_from_maria[5]
+
+
             # assign the data to the dictionary.
             self.user_data['user_name'] = user_data_from_maria[0]
             self.user_data['user_pass_hash'] = user_data_from_maria[1]

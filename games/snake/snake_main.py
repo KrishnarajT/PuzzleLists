@@ -16,6 +16,9 @@ snake_food_color = (0, 255, 0)
 game_over_mssg = pg.Color("#000000")
 game_over_color = "#0C120C"
 
+from pathlib import Path
+
+PUZZLE_LIST_DIR = str(Path(__file__).parent.parent.parent)
 
 # length of snake
 Size = 33
@@ -27,7 +30,7 @@ class Food:
     def __init__(self, parent_display):
         self.parent_display = parent_display
         self.apple_image = pg.image.load(
-            os.path.join(os.getcwd(), "resources/images/snake/apple.png")
+            os.path.join(PUZZLE_LIST_DIR, "resources/images/snake/apple.png")
         ).convert_alpha()
         self.apple_image = pg.transform.scale(self.apple_image, (40, 40))
         self.pos_x = Size * 3
@@ -50,11 +53,11 @@ class Snake:
     def __init__(self, parent_display):
         self.parent_display = parent_display
         self.snake_image = pg.image.load(
-            os.path.join(os.getcwd(), "resources/images/snake/snakeu.png")
+            os.path.join(PUZZLE_LIST_DIR, "resources/images/snake/snakeu.png")
         )
         self.snake_image = pg.transform.scale(self.snake_image, (40, 40))
         self.snake_body = pg.image.load(
-            os.path.join(os.getcwd(), "resources/images/snake/body.png")
+            os.path.join(PUZZLE_LIST_DIR, "resources/images/snake/body.png")
         )
         self.snake_body = pg.transform.scale(self.snake_body, (40, 40))
 
@@ -72,12 +75,12 @@ class Snake:
 
         if self.direction_of_snake == "DOWN":
             self.snake_image = pg.image.load(
-                os.path.join(os.getcwd(), "resources/images/snake/snaked.png")
+                os.path.join(PUZZLE_LIST_DIR, "resources/images/snake/snaked.png")
             )
             self.snake_image = pg.transform.scale(self.snake_image, (40, 40))
         if self.direction_of_snake == "UP":
             self.snake_image = pg.image.load(
-                os.path.join(os.getcwd(), "resources/images/snake/snakeu.png")
+                os.path.join(PUZZLE_LIST_DIR, "resources/images/snake/snakeu.png")
             )
             self.snake_image = pg.transform.scale(self.snake_image, (40, 40))
 
@@ -97,14 +100,14 @@ class Snake:
     def move_LEFT(self):
         self.direction_of_snake = "LEFT"
         self.snake_image = pg.image.load(
-            os.path.join(os.getcwd(), "resources/images/snake/snakel.png")
+            os.path.join(PUZZLE_LIST_DIR, "resources/images/snake/snakel.png")
         )
         self.snake_image = pg.transform.scale(self.snake_image, (40, 40))
 
     def move_RIGHT(self):
         self.direction_of_snake = "RIGHT"
         self.snake_image = pg.image.load(
-            os.path.join(os.getcwd(), "resources/images/snake/snaker.png")
+            os.path.join(PUZZLE_LIST_DIR, "resources/images/snake/snaker.png")
         )
         self.snake_image = pg.transform.scale(self.snake_image, (40, 40))
 
@@ -157,7 +160,7 @@ class snake_game:
         self.display = pg.display.set_mode((1280, 720))
         # self.display.fill(back_gd)
         self.bg_image = pg.image.load(
-            os.path.join(os.getcwd(), "resources/images/snake/grass.png")
+            os.path.join(PUZZLE_LIST_DIR, "resources/images/snake/grass.png")
         ).convert_alpha()
         self.snake = Snake(self.display)
         self.score = 0
@@ -167,10 +170,10 @@ class snake_game:
         self.speed = 0.21
         self.font = pg.font.SysFont("arial", 30)
         self.main_Font = pg.font.Font(
-            os.path.join(os.getcwd(), "resources/fonts", "joystix monospace.otf"), 35
+            os.path.join(PUZZLE_LIST_DIR, "resources/fonts", "joystix monospace.otf"), 35
         )
         self.game_over_font = pg.font.Font(
-            os.path.join(os.getcwd(), "resources/fonts", "joystix monospace.otf"), 25
+            os.path.join(PUZZLE_LIST_DIR, "resources/fonts", "joystix monospace.otf"), 25
         )
 
     # reset game
@@ -239,7 +242,7 @@ class snake_game:
         self.render_background()
 
         line1 = self.game_over_font.render(
-            f"Game Is Over! Your Score is {self.snake.length}", True, game_over_mssg
+            f"Game Is Over! Your Score is {self.snake.length - 1}", True, game_over_mssg
         )
         self.display.blit(
             line1,

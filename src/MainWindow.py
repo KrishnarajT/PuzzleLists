@@ -49,6 +49,9 @@ class Ui_Puzzlelists(QMainWindow):
         self.dbms = database_manager()
         self.dbms.connect_and_create_tables()
         self.current_game = None
+        self.table = QTableWidget(10, 7)
+        self.vBox = QVBoxLayout()
+        self.vBox.addWidget(self.table)
 
         # calling functions
         self.makeFonts()
@@ -56,7 +59,6 @@ class Ui_Puzzlelists(QMainWindow):
         self.center()
 
     def create_hgScore_table(self):
-        self.table = QTableWidget(10, 7)
         self.table.setHorizontalHeaderLabels(
             ["Name", "Snake", "2048", "Tetris", "Space_wars", "Icy", "Total Score"]
         )
@@ -92,8 +94,7 @@ class Ui_Puzzlelists(QMainWindow):
         self.table.horizontalHeader().setFont(QFont(self.games_played_Font, 15))
 
         self.table.setFont(QFont(self.games_played_Font, 15))
-        self.vBox = QVBoxLayout()
-        self.vBox.addWidget(self.table)
+
 
     def center(self):
         qr = self.frameGeometry()
@@ -394,10 +395,11 @@ class Ui_Puzzlelists(QMainWindow):
     def change_games(self):
         """changes the game that is being played, and updates the new scores in the database."""
 
+        print(self.current_game)
         self.change_screen(screen_number=3)
         if self.current_game == ct.GAMES[0]:
             self.setVisible(False)
-            self.dbms.user_game_scores[self.current_game] = gc.start_space_wars()
+            self.dbms.user_game_scores[self.current_game] += gc.start_space_wars()
             self.dbms.user_data["user_score"] += self.dbms.user_game_scores[
                 self.current_game
             ]
@@ -405,7 +407,7 @@ class Ui_Puzzlelists(QMainWindow):
             self.setVisible(True)
         elif self.current_game == ct.GAMES[1]:
             self.setVisible(False)
-            self.dbms.user_game_scores[self.current_game] = gc.start_2048()
+            self.dbms.user_game_scores[self.current_game] += gc.start_2048()
             self.dbms.user_data["user_score"] += self.dbms.user_game_scores[
                 self.current_game
             ]
@@ -413,7 +415,7 @@ class Ui_Puzzlelists(QMainWindow):
             self.setVisible(True)
         elif self.current_game == ct.GAMES[2]:
             self.setVisible(False)
-            self.dbms.user_game_scores[self.current_game] = gc.start_icy()
+            self.dbms.user_game_scores[self.current_game] += gc.start_icy()
             self.dbms.user_data["user_score"] += self.dbms.user_game_scores[
                 self.current_game
             ]
@@ -422,7 +424,7 @@ class Ui_Puzzlelists(QMainWindow):
         elif self.current_game == ct.GAMES[3]:
             self.setVisible(False)
             game = gc.snake_game()
-            self.dbms.user_game_scores[self.current_game] = game.run()
+            self.dbms.user_game_scores[self.current_game] += game.run()
             self.dbms.user_data["user_score"] += self.dbms.user_game_scores[
                 self.current_game
             ]
@@ -431,7 +433,7 @@ class Ui_Puzzlelists(QMainWindow):
         elif self.current_game == ct.GAMES[4]:
             self.setVisible(False)
             tetris = gc.TetrisApp()
-            self.dbms.user_game_scores[self.current_game] = tetris.start()
+            self.dbms.user_game_scores[self.current_game] += tetris.run()
             self.dbms.user_data["user_score"] += self.dbms.user_game_scores[
                 self.current_game
             ]
@@ -467,12 +469,6 @@ class Ui_Puzzlelists(QMainWindow):
         # first get the highscores
         self.dbms.get_top_scores()
         self.create_hgScore_table()
-
-        # # now display the highscores in the table.
-        # self.model = TableModel(self.dbms.top_scores)
-        # self.hgscore_score_tblView.setModel(self.model)
-        self.hgscore_score_tblView.setLayout(self.vBox)
-        # figure out some way to display the highscores of the current game.
 
     def setupUi(self):
         # setting icons
@@ -1120,6 +1116,7 @@ class Ui_Puzzlelists(QMainWindow):
         )
 
         self.hgscore_score_tblView.setObjectName("hgscore_score_colview")
+        self.hgscore_score_tblView.setLayout(self.vBox)
 
         self.stackedWidget.addWidget(self.HighScores)
         self.setCentralWidget(self.centralwidget)
