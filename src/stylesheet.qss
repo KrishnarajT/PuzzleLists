@@ -17,3 +17,11 @@ QPushButton[objectName^="login_Begin_btn"]{
     /* font-family: url(fonts:kel.ttf);
     /* font-family: "Game Played"; */
 }
+QTableView{
+    background: transparent;
+    color: '#1c0940';
+}
+QTableWidget{
+    background: transparent;
+    color: rgb(255, 255, 255);
+}

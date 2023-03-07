@@ -21,6 +21,6 @@ if __name__ == "__main__":
 
     window.show()
 
-    window.change_screen(0)
+    window.change_screen(4)
 
     app.exec()

@@ -16,13 +16,10 @@
 from math import floor
 import pygame
 from Ky_Game import *
-import pyautogui
 import os
 import random
 
-
-
-WIDTH, HEIGHT = pyautogui.size()
+WIDTH, HEIGHT = 1280, 720
 
 # IMAGES THAT ARE SCALED TO THE SCREEN DIMENSIONS.
 # THESE ARE BACKGROUND IMAGES FOR EVERY PLAY MODE.
@@ -72,6 +69,10 @@ TIME_LIM_BTN_UPPER = (WIDTH - floor(WIDTH / 3.14), HEIGHT - floor(HEIGHT / 2.51)
 CLICK_LIM_BTN_LOWER = (WIDTH - floor(WIDTH / 1.46), HEIGHT - floor(HEIGHT / 3.2))
 CLICK_LIM_BTN_UPPER = (WIDTH - floor(WIDTH / 3.14), HEIGHT - floor(HEIGHT / 10.8))
 
+
+# Music
+BGM = None
+CLICK_SOUND = None
 
 # DIMENSIONS OF THE BOX TO BE DRAWN IN THE BACKGROUND ON PLAY SCREEN
 BG_BOX_SIDE = 700
@@ -724,15 +725,16 @@ def mainMenu():
 
 # FUNCTION TO START THE GAME AND SHOW THE MAIN SCREEN.
 def start_icy():
-    global WIN
+    global WIN, BG_IMAGE, MENU_IMAGE, PLAY_IMAGE_CLICK, PLAY_IMAGE_TIME, CLICK_SOUND, BGM
 
     pygame.font.init()
     pygame.mixer.init()    
     
     WIN = pygame.display.set_mode((WIDTH, HEIGHT), pygame.RESIZABLE)
     pygame.display.set_caption("ICY")
-    
-    
+    print(pygame.display.Info())
+    print(pygame.display.get_wm_info())
+    print(WIN.get_size())
     # BGM AND CLICK SOUNC EFFECT
     BGM = pygame.mixer.music.load(os.path.join(os.getcwd(), "resources/audio", "BGM.mp3"))
     pygame.mixer.music.play(-1)
@@ -781,6 +783,7 @@ def start_icy():
     if run_Menu:
         mainMenu()
     pygame.quit()
+    return click_level + time_level
 
 
 # start_icy()

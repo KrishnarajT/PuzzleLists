@@ -10,6 +10,14 @@ from PyQt6.QtCore import QObject, Qt, QThread, QUrl, pyqtSlot
 from PyQt6.QtWidgets import QFileDialog, QListWidget, QMainWindow, QPushButton
 from PyQt6.QtCore import QObject, QThread, pyqtSignal
 from PyQt6.QtGui import QFont
+from PyQt6.QtWidgets import (
+    QApplication,
+    QWidget,
+    QTableWidget,
+    QTableWidgetItem,
+    QVBoxLayout,
+    QHeaderView,
+)
 
 # conventional imports
 import sys
@@ -23,50 +31,9 @@ from security import find_hash
 from database_manager import database_manager
 import game_caller as gc
 
-class TableModel(QtCore.QAbstractTableModel):
-    def __init__(self, data):
-        super(TableModel, self).__init__()
-        self._data = data
-
-    def data(self, index, role):
-        if role == Qt.DisplayRole:
-            # See below for the nested-list data structure.
-            # .row() indexes into the outer list,
-            # .column() indexes into the sub-list
-            return self._data[index.row()][index.column()]
-
-    def rowCount(self, index):
-        # The length of the outer list.
-        return len(self._data)
-
-    def columnCount(self, index):
-        # The following takes the first sub-list, and returns
-        # the length (only works if all rows are an equal length)
-        return len(self._data[0])
-    
-class Worker(QObject):
-    finished_sending_mail = pyqtSignal(bool)
-    #     progress = pyqtSignal(int)
-
-    #     def run(self, requiredGraphs, graphWordsList, graphDestPath, filePath, progressBar, progressLabel, mainTabs, labels, messaging_app):
-    #         progressBar.setValue(0)
-    #         r = mk.read()
-    #         r.make_DataFrames(filePath, progressBar, progressLabel, messaging_app)
-    #         r.calc_statistics(progressBar, progressLabel)
-    #         statistics = r.return_statistics(progressBar, progressLabel)
-    #         for i in range(len(statistics)):
-    #             labels[i].setText(statistics[i])
-    #         r.make_graphs(requiredGraphs, graphWordsList, graphDestPath, progressBar, progressLabel, mainTabs)
-    #         progressBar.setValue(100)
-    #         mainTabs.setCurrentIndex(3)
-    #         self.finished.emit()
-    def send_mail(self, email, otp):
-        if send_mail(email, otp):
-            self.finished_sending_mail.emit(True)
-        else: 
-            self.finished_sending_mail.emit(False)
 
 class Ui_Puzzlelists(QMainWindow):
+
     def __init__(self):
         super().__init__()
 
@@ -88,8 +55,45 @@ class Ui_Puzzlelists(QMainWindow):
         self.setupUi()
         self.center()
 
-    def make_threads(self):
-        pass
+    def create_hgScore_table(self):
+        self.table = QTableWidget(10, 7)
+        self.table.setHorizontalHeaderLabels(
+            ["Name", "Snake", "2048", "Tetris", "Space_wars", "Icy", "Total Score"]
+        )
+        self.table.setColumnWidth(0, 250)
+
+        for i, row in enumerate(self.dbms.top_scores):
+            for j, item in enumerate(row):
+                item = QTableWidgetItem(str(item))
+                item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
+                self.table.setItem(i, j, item)
+
+        self.table.setEditTriggers(
+            QtWidgets.QAbstractItemView.EditTrigger.NoEditTriggers
+        )
+        self.table.setSelectionBehavior(
+            QtWidgets.QAbstractItemView.SelectionBehavior.SelectRows
+        )
+        self.table.setSelectionMode(
+            QtWidgets.QAbstractItemView.SelectionMode.SingleSelection
+        )
+        self.table.setShowGrid(False)
+        self.table.verticalHeader().setVisible(False)
+        self.table.horizontalHeader().setStretchLastSection(True)
+        self.table.horizontalHeader().setSectionResizeMode(
+            QtWidgets.QHeaderView.ResizeMode.Stretch
+        )
+        self.table.horizontalHeader().setStyleSheet(
+            "background: '#fea7ec'; color: '#1c0940';"
+        )
+        self.table.horizontalScrollBar().setEnabled(False)
+        self.table.verticalScrollBar().setEnabled(False)
+        self.table.verticalHeader().setEnabled(False)
+        self.table.horizontalHeader().setFont(QFont(self.games_played_Font, 15))
+
+        self.table.setFont(QFont(self.games_played_Font, 15))
+        self.vBox = QVBoxLayout()
+        self.vBox.addWidget(self.table)
 
     def center(self):
         qr = self.frameGeometry()
@@ -138,17 +142,17 @@ class Ui_Puzzlelists(QMainWindow):
         print(str(ct.GAME_PRICES.get(ct.GAMES[0])))
         if ct.GAMES[0] in games:
             self.chgame_game1_btn.setText("PLAY")
-        else: 
+        else:
             self.chgame_game1_btn.setText(str(ct.GAME_PRICES.get(ct.GAMES[0])))
-        
+
         if ct.GAMES[1] in games:
             self.chgame_game2_btn.setText("PLAY")
-        else: 
+        else:
             self.chgame_game2_btn.setText(str(ct.GAME_PRICES.get(ct.GAMES[1])))
 
         if ct.GAMES[2] in games:
             self.chgame_game3_btn.setText("PLAY")
-        else: 
+        else:
             self.chgame_game3_btn.setText(str(ct.GAME_PRICES.get(ct.GAMES[2])))
 
     def change_screen(self, screen_number):
@@ -201,8 +205,10 @@ class Ui_Puzzlelists(QMainWindow):
                 self.dbms.user_data["user_pass_hash"] = self.user_pass_hash
                 if self.dbms.update_user_password():
                     self.fpass_remark_lbl.setText("Password Changed!")
-                else: 
-                    self.fpass_remark_lbl.setText("Couldnt Change Password!, Try Troubleshooting")                
+                else:
+                    self.fpass_remark_lbl.setText(
+                        "Couldnt Change Password!, Try Troubleshooting"
+                    )
                 self.change_screen(screen_number=0)
             else:
                 self.fpass_remark_lbl.setText("OTP is wrong! Try Again")
@@ -218,7 +224,10 @@ class Ui_Puzzlelists(QMainWindow):
                 self.dbms.user_data["user_email"] = self.user_email
                 self.dbms.user_data["user_score"] = 0
                 self.dbms.user_data["user_pass_hash"] = self.user_pass_hash
-                print('created and inserted user_pass_hash: ', self.dbms.user_data.get('user_pass_hash'))
+                print(
+                    "created and inserted user_pass_hash: ",
+                    self.dbms.user_data.get("user_pass_hash"),
+                )
                 if self.dbms.insert_user():
                     print("user inserted")
                     self.signup_remark_lbl.setText("User Appended to Our PuzzleList!!")
@@ -239,9 +248,15 @@ class Ui_Puzzlelists(QMainWindow):
             if self.user_name == "" or self.user_pass_hash == "":
                 self.fpass_remark_lbl.setText("Please fill all the fields!")
                 return
+            
+            if len(self.user_name) > 10:
+                self.fpass_remark_lbl.setText("Username cannot be more than 10 characters!")
+                return
 
             if len(self.user_pass_hash) < 8:
-                self.fpass_remark_lbl.setText("Password must be atleast 8 characters long!")
+                self.fpass_remark_lbl.setText(
+                    "Password must be atleast 8 characters long!"
+                )
                 return
             if self.user_pass_hash == self.user_name:
                 self.fpass_remark_lbl.setText("Password cannot be same as username!")
@@ -250,24 +265,31 @@ class Ui_Puzzlelists(QMainWindow):
                 self.fpass_remark_lbl.setText("Password must contain atleast 1 number!")
                 return
             if self.user_pass_hash.isnumeric():
-                self.fpass_remark_lbl.setText("Password must contain atleast 1 alphabet!")
+                self.fpass_remark_lbl.setText(
+                    "Password must contain atleast 1 alphabet!"
+                )
                 return
             if self.user_pass_hash.isalnum():
-                self.fpass_remark_lbl.setText("Password must contain atleast 1 special character!")
+                self.fpass_remark_lbl.setText(
+                    "Password must contain atleast 1 special character!"
+                )
                 return
             if self.user_pass_hash.islower():
-                self.fpass_remark_lbl.setText("Password must contain atleast 1 uppercase letter!")
+                self.fpass_remark_lbl.setText(
+                    "Password must contain atleast 1 uppercase letter!"
+                )
                 return
             if self.user_pass_hash.isupper():
-                self.fpass_remark_lbl.setText("Password must contain atleast 1 lowercase letter!")
+                self.fpass_remark_lbl.setText(
+                    "Password must contain atleast 1 lowercase letter!"
+                )
                 return
-            if self.user_pass_hash == 'password':
+            if self.user_pass_hash == "password":
                 self.fpass_remark_lbl.setText("Password cannot be 'password'!")
                 return
-            if self.user_pass_hash == '12345678':
+            if self.user_pass_hash == "12345678":
                 self.fpass_remark_lbl.setText("Password cannot be '12345678'!")
                 return
-
 
             # you cannot send another otp immediately.
             self.fpass_sendOtp_btn.setEnabled(False)
@@ -279,37 +301,53 @@ class Ui_Puzzlelists(QMainWindow):
             self.user_email = self.signup_enterEmail_lineedit.text()
             if self.user_name == "" or self.user_pass_hash == "":
                 self.signup_remark_lbl.setText("Please fill all the fields!")
-                return        
+                return
+
+            if len(self.user_name) > 10:
+                self.fpass_remark_lbl.setText("Username cannot be more than 10 characters!")
+                return
             
             if len(self.user_pass_hash) < 8:
-                self.signup_remark_lbl.setText("Password must be atleast 8 characters long!")
+                self.signup_remark_lbl.setText(
+                    "Password must be atleast 8 characters long!"
+                )
                 return
             if self.user_pass_hash == self.user_name:
                 self.signup_remark_lbl.setText("Password cannot be same as username!")
                 return
             if self.user_pass_hash.isalpha():
-                self.signup_remark_lbl.setText("Password must contain atleast 1 number!")
+                self.signup_remark_lbl.setText(
+                    "Password must contain atleast 1 number!"
+                )
                 return
             if self.user_pass_hash.isnumeric():
-                self.signup_remark_lbl.setText("Password must contain atleast 1 alphabet!")
+                self.signup_remark_lbl.setText(
+                    "Password must contain atleast 1 alphabet!"
+                )
                 return
             if self.user_pass_hash.isalnum():
-                self.signup_remark_lbl.setText("Password must contain atleast 1 special character!")
+                self.signup_remark_lbl.setText(
+                    "Password must contain atleast 1 special character!"
+                )
                 return
             if self.user_pass_hash.islower():
-                self.signup_remark_lbl.setText("Password must contain atleast 1 uppercase letter!")
+                self.signup_remark_lbl.setText(
+                    "Password must contain atleast 1 uppercase letter!"
+                )
                 return
             if self.user_pass_hash.isupper():
-                self.signup_remark_lbl.setText("Password must contain atleast 1 lowercase letter!")
+                self.signup_remark_lbl.setText(
+                    "Password must contain atleast 1 lowercase letter!"
+                )
                 return
-            if self.user_pass_hash == 'password':
+            if self.user_pass_hash == "password":
                 self.signup_remark_lbl.setText("Password cannot be 'password'!")
                 return
-            if self.user_pass_hash == '12345678':
+            if self.user_pass_hash == "12345678":
                 self.signup_remark_lbl.setText("Password cannot be '12345678'!")
                 return
 
-            # you cannot send another otp immediately. 
+            # you cannot send another otp immediately.
             self.signup_sendOtp_btn.setEnabled(False)
 
         print("generating otp")
@@ -328,7 +366,7 @@ class Ui_Puzzlelists(QMainWindow):
     def verify_login(self):
         self.user_name = self.login_enterName_lineedit.text()
         self.user_pass_hash = self.login_enterPass_lineedit.text()
-        print('password you just entered is is: ', self.user_pass_hash)
+        print("password you just entered is is: ", self.user_pass_hash)
         self.dbms.user_data["user_name"] = self.user_name
         if self.dbms.get_user_data():
             print("user pass hash from teh screen: ", self.user_pass_hash)
@@ -337,7 +375,10 @@ class Ui_Puzzlelists(QMainWindow):
             salted_pass = self.user_pass_hash + self.dbms.user_data.get("user_salt")
             self.user_pass_hash = find_hash(salted_pass)
 
-            print("user pass hash from the database: ", self.dbms.user_data.get("user_pass_hash"))
+            print(
+                "user pass hash from the database: ",
+                self.dbms.user_data.get("user_pass_hash"),
+            )
             if self.user_pass_hash == self.dbms.user_data.get("user_pass_hash"):
                 self.login_remark_lbl.setText("Login Successful!")
                 self.chgame_coins_lbl.setText(
@@ -357,34 +398,44 @@ class Ui_Puzzlelists(QMainWindow):
         if self.current_game == ct.GAMES[0]:
             self.setVisible(False)
             self.dbms.user_game_scores[self.current_game] = gc.start_space_wars()
-            self.dbms.user_data['user_score'] += self.dbms.user_game_scores[self.current_game]
-            self.chgame_coins_lbl.setText(str(self.dbms.user_data['user_score']))
+            self.dbms.user_data["user_score"] += self.dbms.user_game_scores[
+                self.current_game
+            ]
+            self.chgame_coins_lbl.setText(str(self.dbms.user_data["user_score"]))
             self.setVisible(True)
         elif self.current_game == ct.GAMES[1]:
             self.setVisible(False)
             self.dbms.user_game_scores[self.current_game] = gc.start_2048()
-            self.dbms.user_data['user_score'] += self.dbms.user_game_scores[self.current_game]
-            self.chgame_coins_lbl.setText(str(self.dbms.user_data['user_score']))
+            self.dbms.user_data["user_score"] += self.dbms.user_game_scores[
+                self.current_game
+            ]
+            self.chgame_coins_lbl.setText(str(self.dbms.user_data["user_score"]))
             self.setVisible(True)
         elif self.current_game == ct.GAMES[2]:
             self.setVisible(False)
             self.dbms.user_game_scores[self.current_game] = gc.start_icy()
-            self.dbms.user_data['user_score'] += self.dbms.user_game_scores[self.current_game]
-            self.chgame_coins_lbl.setText(str(self.dbms.user_data['user_score']))
+            self.dbms.user_data["user_score"] += self.dbms.user_game_scores[
+                self.current_game
+            ]
+            self.chgame_coins_lbl.setText(str(self.dbms.user_data["user_score"]))
             self.setVisible(True)
         elif self.current_game == ct.GAMES[3]:
             self.setVisible(False)
             game = gc.snake_game()
             self.dbms.user_game_scores[self.current_game] = game.run()
-            self.dbms.user_data['user_score'] += self.dbms.user_game_scores[self.current_game]
-            self.chgame_coins_lbl.setText(str(self.dbms.user_data['user_score']))
+            self.dbms.user_data["user_score"] += self.dbms.user_game_scores[
+                self.current_game
+            ]
+            self.chgame_coins_lbl.setText(str(self.dbms.user_data["user_score"]))
             self.setVisible(True)
         elif self.current_game == ct.GAMES[4]:
             self.setVisible(False)
             tetris = gc.TetrisApp()
             self.dbms.user_game_scores[self.current_game] = tetris.start()
-            self.dbms.user_data['user_score'] += self.dbms.user_game_scores[self.current_game]
-            self.chgame_coins_lbl.setText(str(self.dbms.user_data['user_score']))
+            self.dbms.user_data["user_score"] += self.dbms.user_game_scores[
+                self.current_game
+            ]
+            self.chgame_coins_lbl.setText(str(self.dbms.user_data["user_score"]))
             self.setVisible(True)
 
         # now that the game has been played at this point, and the scores are with us, we can update the database, so that if the user now wishes to see the highscores, he can see the updated scores.
@@ -392,7 +443,6 @@ class Ui_Puzzlelists(QMainWindow):
 
     # this function will have to be multithreaded.
     def purchase_game(self, game):
-
         """Checkes if the user has enough coins to purchase the game, and if
         so, then launches that game after reducing the coins, and otherwise does nothing.
         Args:
@@ -408,7 +458,7 @@ class Ui_Puzzlelists(QMainWindow):
                 self.dbms.update_database()
                 self.current_game = game
                 self.change_games()
-        else: 
+        else:
             self.current_game = game
             self.change_games()
 
@@ -416,11 +466,12 @@ class Ui_Puzzlelists(QMainWindow):
         """Displays the highscores of the current game on the column view."""
         # first get the highscores
         self.dbms.get_top_scores()
-        
-        # now display the highscores in the table.
-        self.model = TableModel(self.dbms.top_scores)
-        self.hgscore_score_tblView.setModel(self.model)
+        self.create_hgScore_table()
 
+        # # now display the highscores in the table.
+        # self.model = TableModel(self.dbms.top_scores)
+        # self.hgscore_score_tblView.setModel(self.model)
+        self.hgscore_score_tblView.setLayout(self.vBox)
         # figure out some way to display the highscores of the current game.
 
     def setupUi(self):
@@ -1063,14 +1114,11 @@ class Ui_Puzzlelists(QMainWindow):
         self.hgscore_backToGame_btn.clicked.connect(lambda: self.change_screen(3))
 
         self.hgscore_score_tblView = QtWidgets.QTableView(parent=self.HighScores)
-        self.hgscore_score_tblView.setGeometry(QtCore.QRect(220, 170, 891, 441))
-        font = QtGui.QFont()
+        self.hgscore_score_tblView.setGeometry(QtCore.QRect(70, 170, 1141, 441))
         self.hgscore_score_tblView.setFont(
             QFont(self.games_played_Font, pointSize=25, weight=50)
         )
-        self.hgscore_score_tblView.setStyleSheet(
-            'color: "#fea7ec";\n' "border: none;\n" "background:pink;"
-        )
+
         self.hgscore_score_tblView.setObjectName("hgscore_score_colview")
 
         self.stackedWidget.addWidget(self.HighScores)
@@ -1083,7 +1131,9 @@ class Ui_Puzzlelists(QMainWindow):
     def retranslateUi(self):
         _translate = QtCore.QCoreApplication.translate
         self.setWindowTitle(_translate("Puzzlelists", "Puzzlelists"))
-        self.login_remark_lbl.setText(_translate("Puzzlelists", "Fill Details and Press Begin!"))
+        self.login_remark_lbl.setText(
+            _translate("Puzzlelists", "Fill Details and Press Begin!")
+        )
         self.login_newUser_btn.setText(_translate("Puzzlelists", "New User? Join Us!"))
         self.login_forgotPass_btn.setText(_translate("Puzzlelists", "Forgot Password?"))
         self.login_enterName_lbl.setText(

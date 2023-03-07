@@ -1,13 +1,12 @@
 import pygame
 import os
 import random
-import pyautogui
 from Ky_Game import color
 
 pygame.font.init()
 pygame.mixer.init()
 # GENERAL CONSTANTS
-WIDTH, HEIGHT = pyautogui.size()
+WIDTH, HEIGHT = 1280, 720
 FPS = 90
 ORIGIN = (0, 0)
 
