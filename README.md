@@ -29,8 +29,14 @@ Enjoy!
 1. Refer to requirements.txt for the list of packages required.
 2. Python 3.8.5 or above
 3. Linux or Windows (idk about mac, coz we dont test on stuff like that)
+4. Mariadb or Mysql (for database), with a user and password with all privileges on the database.
 
 # Installation
+1. Clone the Repo
+2. Install the requirements using `pip install -r requirements.txt`
+3. Create a database in mariadb or mysql and name it `puzzlelists`
+4. Enter your username and password for the database in the `database_manager.py` file.
+5. Run the `main.py` file using `python main.py`.
 
 # Credits
 1. [Pygame](https://www.pygame.org/news)
@@ -40,6 +46,8 @@ Enjoy!
    1. [Icy](https://github.com/KrishnarajT/Icy)
    2. [2048](https://github.com/KrishnarajT/2048)
    3. [Space Wars](https://github.com/KrishnarajT/Space-Wars-Ship-thing)
+   4. [Tetris](https://github.com/KrishnarajT/Tetris)
+   5. [Snake](https://github.com/Parth4123/Snake-Game)
 5. [chosic.com](https://www.chosic.com/) and [Bensound](https://www.bensound.com/) for their Free Music!
 
 Credits to Teachers, Parents and Lots of Friends for their constant help and support. 
