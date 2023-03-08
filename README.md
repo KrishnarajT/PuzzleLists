@@ -25,6 +25,18 @@ Enjoy!
 ## Choosing Games
 ![](https://github.com/KrishnarajT/PuzzleLists/blob/main/documentation/screenshots/choose_game.png)
 
+# Games
+## Space Wars
+
+## Icy
+
+## 2048
+
+## Snake
+
+## Tetris
+![](https://github.com/KrishnarajT/PuzzleLists/blob/main/documentation/screenshots/tetris.gif)
+
 # Pre-Requisites for Compilation and Testing
 1. Refer to requirements.txt for the list of packages required.
 2. Python 3.8.5 or above
