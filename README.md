@@ -27,12 +27,16 @@ Enjoy!
 
 # Games
 ## Space Wars
+![](https://github.com/KrishnarajT/PuzzleLists/blob/main/documentation/screenshots/Space_wars.gif)
 
 ## Icy
+![](https://github.com/KrishnarajT/PuzzleLists/blob/main/documentation/screenshots/Icy.gif)
 
 ## 2048
+![](https://github.com/KrishnarajT/PuzzleLists/blob/main/documentation/screenshots/2048.gif)
 
 ## Snake
+![](https://github.com/KrishnarajT/PuzzleLists/blob/main/documentation/screenshots/Snake.gif)
 
 ## Tetris
 ![](https://github.com/KrishnarajT/PuzzleLists/blob/main/documentation/screenshots/tetris.gif)
