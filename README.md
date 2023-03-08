@@ -26,10 +26,11 @@ Enjoy!
 ![](https://github.com/KrishnarajT/PuzzleLists/blob/main/documentation/screenshots/choose_game.png)
 
 # Pre-Requisites for Compilation and Testing
+1. Refer to requirements.txt for the list of packages required.
+2. Python 3.8.5 or above
+3. Linux or Windows (idk about mac, coz we dont test on stuff like that)
 
 # Installation
-
-# Todo
 
 # Credits
 1. [Pygame](https://www.pygame.org/news)

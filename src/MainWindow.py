@@ -33,7 +33,6 @@ import game_caller as gc
 import pygame as pg
 
 class Ui_Puzzlelists(QMainWindow):
-
     def __init__(self):
         super().__init__()
 
@@ -62,7 +61,9 @@ class Ui_Puzzlelists(QMainWindow):
     def start_music(self):
         pg.mixer.init()
         # BGM AND CLICK SOUNC EFFECT
-        self.BGM = pg.mixer.music.load(os.path.join(ct.ROOT_DIR, "resources/audio", "RetroFuture-Clean.mp3"))
+        self.BGM = pg.mixer.music.load(
+            os.path.join(ct.ROOT_DIR, "resources/audio", "RetroFuture-Clean.mp3")
+        )
         pg.mixer.music.play(-1)
 
     def create_hgScore_table(self):
@@ -255,9 +256,11 @@ class Ui_Puzzlelists(QMainWindow):
             if self.user_name == "" or self.user_pass_hash == "":
                 self.fpass_remark_lbl.setText("Please fill all the fields!")
                 return
-            
+
             if len(self.user_name) > 10:
-                self.fpass_remark_lbl.setText("Username cannot be more than 10 characters!")
+                self.fpass_remark_lbl.setText(
+                    "Username cannot be more than 10 characters!"
+                )
                 return
 
             if len(self.user_pass_hash) < 8:
@@ -311,9 +314,11 @@ class Ui_Puzzlelists(QMainWindow):
                 return
 
             if len(self.user_name) > 10:
-                self.fpass_remark_lbl.setText("Username cannot be more than 10 characters!")
+                self.fpass_remark_lbl.setText(
+                    "Username cannot be more than 10 characters!"
+                )
                 return
-            
+
             if len(self.user_pass_hash) < 8:
                 self.signup_remark_lbl.setText(
                     "Password must be atleast 8 characters long!"

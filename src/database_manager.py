@@ -7,6 +7,7 @@ from security import find_hash
 import string
 import random
 
+
 class database_manager:
     """class to manage all database related tasks."""
 
@@ -28,16 +29,16 @@ class database_manager:
             "user_pass_hash": None,
             "user_score": 0,
             "user_salt": None,
-            "user_games": ["snake", "tetris"]
+            "user_games": ["snake", "tetris"],
         }
         self.top_scores = None
         self.cursor = None
         self.games_owned_by_user = ["snake", "tetris"]
 
     def generate_random_string(self, length):
-        ran = ''.join(random.choices(string.ascii_uppercase + string.digits, k = length))    
+        ran = "".join(random.choices(string.ascii_uppercase + string.digits, k=length))
         return str(ran)
-    
+
     def connect_and_create_tables(self):
         """forms connection with sql, and returns True.
             or else returns False
@@ -85,24 +86,27 @@ class database_manager:
             game_scores_from_maria = self.cursor.fetchone()
 
             # Assign the game scores to the dictionary.
-            self.user_game_scores['snake'] = game_scores_from_maria[1]
-            self.user_game_scores['2048'] = game_scores_from_maria[2]
-            self.user_game_scores['tetris'] = game_scores_from_maria[3]
-            self.user_game_scores['space wars'] = game_scores_from_maria[4]
-            self.user_game_scores['Icy'] = game_scores_from_maria[5]
-
+            self.user_game_scores["snake"] = game_scores_from_maria[1]
+            self.user_game_scores["2048"] = game_scores_from_maria[2]
+            self.user_game_scores["tetris"] = game_scores_from_maria[3]
+            self.user_game_scores["space wars"] = game_scores_from_maria[4]
+            self.user_game_scores["Icy"] = game_scores_from_maria[5]
 
             # assign the data to the dictionary.
-            self.user_data['user_name'] = user_data_from_maria[0]
-            self.user_data['user_pass_hash'] = user_data_from_maria[1]
-            self.user_data['user_salt'] = user_data_from_maria[2]
-            self.user_data['user_email'] = user_data_from_maria[3]
-            self.user_data['user_score'] = user_data_from_maria[4]
-            self.user_data['user_games'] = user_data_from_maria[5].strip('()\'').split(',')
-            self.user_data['user_games'] = [x.strip().strip('\'') for x in self.user_data['user_games']]
+            self.user_data["user_name"] = user_data_from_maria[0]
+            self.user_data["user_pass_hash"] = user_data_from_maria[1]
+            self.user_data["user_salt"] = user_data_from_maria[2]
+            self.user_data["user_email"] = user_data_from_maria[3]
+            self.user_data["user_score"] = user_data_from_maria[4]
+            self.user_data["user_games"] = (
+                user_data_from_maria[5].strip("()'").split(",")
+            )
+            self.user_data["user_games"] = [
+                x.strip().strip("'") for x in self.user_data["user_games"]
+            ]
             print(self.user_data)
             return True
-    
+
     def insert_user(self):
         """Adds a new user to the database.
         Returns:
@@ -110,10 +114,12 @@ class database_manager:
         """
 
         # salt the password
-        self.user_data['user_salt'] = self.generate_random_string(10)
-        print(self.user_data['user_salt'])
-        self.user_data['user_pass_hash'] = self.user_data['user_pass_hash'] + self.user_data['user_salt']
-        self.user_data['user_pass_hash'] = find_hash(self.user_data['user_pass_hash'])
+        self.user_data["user_salt"] = self.generate_random_string(10)
+        print(self.user_data["user_salt"])
+        self.user_data["user_pass_hash"] = (
+            self.user_data["user_pass_hash"] + self.user_data["user_salt"]
+        )
+        self.user_data["user_pass_hash"] = find_hash(self.user_data["user_pass_hash"])
 
         try:
             # Updating the User Login Table
@@ -133,13 +139,15 @@ class database_manager:
 
     def update_user_password(self):
         """updates the user data in the database. To be called only when forgot password
-        Returns: True if the password was updated successfully, False otherwise. 
+        Returns: True if the password was updated successfully, False otherwise.
         """
         # salt the password
-        self.user_data['user_salt'] = self.generate_random_string(10)
-        print(self.user_data['user_salt'])
-        self.user_data['user_pass_hash'] = self.user_data['user_pass_hash'] + self.user_data['user_salt']
-        self.user_data['user_pass_hash'] = find_hash(self.user_data['user_pass_hash'])
+        self.user_data["user_salt"] = self.generate_random_string(10)
+        print(self.user_data["user_salt"])
+        self.user_data["user_pass_hash"] = (
+            self.user_data["user_pass_hash"] + self.user_data["user_salt"]
+        )
+        self.user_data["user_pass_hash"] = find_hash(self.user_data["user_pass_hash"])
 
         try:
             query = f"update UserLogin set Password = \"{self.user_data.get('user_pass_hash')}\" , Salt = \"{self.user_data.get('user_salt')}\" where User_Name = \"{self.user_data.get('user_name')}\""
