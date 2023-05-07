@@ -2,12 +2,11 @@
 ![](./design/logo/logo%20-%20line%20format.png)
 
 An Arcade made in Python using Pygame and Pyqt that has 6 Puzzle Games. The games are:
-1. Maze Solver
-2. Space Wars
-3. Tetris
-4. Icy
-5. Snake
-6. 2048
+1. Space Wars
+2. Tetris
+3. Icy
+4. Snake
+5. 2048
 
 The Interface Design is Made in PyQT and the Games are made in Pygame.
 Enjoy!
@@ -27,12 +26,16 @@ Enjoy!
 
 # Games
 ## Space Wars
+![](https://github.com/KrishnarajT/PuzzleLists/blob/main/documentation/screenshots/Space_wars.gif)
 
 ## Icy
+![](https://github.com/KrishnarajT/PuzzleLists/blob/main/documentation/screenshots/Icy.gif)
 
 ## 2048
+![](https://github.com/KrishnarajT/PuzzleLists/blob/main/documentation/screenshots/2048.gif)
 
 ## Snake
+![](https://github.com/KrishnarajT/PuzzleLists/blob/main/documentation/screenshots/Snake.gif)
 
 ## Tetris
 ![](https://github.com/KrishnarajT/PuzzleLists/blob/main/documentation/screenshots/tetris.gif)
