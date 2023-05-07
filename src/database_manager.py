@@ -47,8 +47,8 @@ class database_manager:
         """
         try:
             self.connection = mariadb.connect(
-                user="parth",
-                password="4123",
+                user="krishnaraj",
+                password="mariamaria",
                 host="127.0.0.1",
                 port=3306,
                 database="Puzzlelists",
